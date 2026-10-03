@@ -9,7 +9,11 @@ import {
 
 import { PrismaService } from "../database/prisma.service";
 import { ObjectStorageService } from "../media/object-storage.service";
-import { normalizePublicSettings, PUBLIC_SETTING_KEYS } from "./public-content";
+import {
+  normalizePublicSettings,
+  PUBLIC_HOME_SETTING_KEYS,
+  PUBLIC_SETTING_KEYS,
+} from "./public-content";
 
 @Injectable()
 export class PublicService {
@@ -19,10 +23,14 @@ export class PublicService {
   ) {}
 
   async getPublicSettings() {
+    return this.getSettingsByKeys(PUBLIC_SETTING_KEYS);
+  }
+
+  private async getSettingsByKeys(keys: readonly string[]) {
     const rows = await this.prisma.setting.findMany({
       where: {
         isPublic: true,
-        key: { in: [...PUBLIC_SETTING_KEYS] },
+        key: { in: [...keys] },
       },
       select: {
         key: true,
@@ -30,7 +38,7 @@ export class PublicService {
       },
     });
 
-    return normalizePublicSettings(rows);
+    return normalizePublicSettings(rows, keys);
   }
 
   async getHome() {
@@ -77,7 +85,7 @@ export class PublicService {
           },
         },
       }),
-      this.getPublicSettings(),
+      this.getSettingsByKeys(PUBLIC_HOME_SETTING_KEYS),
       this.prisma.transparencyDocument.groupBy({
         by: ["type"],
         where: { publishStatus: PublishStatus.PUBLISHED },
