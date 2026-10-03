@@ -8,12 +8,23 @@ import {
 } from "../../lib/public-api";
 import styles from "../home.module.css";
 
+type ActiveNav = "services" | "projects" | "transparency" | "about";
+
+const navItems: Array<{ href: string; label: string; key: ActiveNav }> = [
+  { href: "/services", label: "خدمات", key: "services" },
+  { href: "/projects", label: "طرح‌ها", key: "projects" },
+  { href: "/transparency", label: "گزارش‌ها", key: "transparency" },
+  { href: "/about", label: "درباره ما", key: "about" },
+];
+
 export function PublicShell({
   settings,
   children,
+  activeNav,
 }: {
   settings: PublicSettings;
   children: ReactNode;
+  activeNav?: ActiveNav;
 }) {
   const address = publicSetting(settings, "center.address");
   const phone = publicSetting(settings, "center.phone");
@@ -39,12 +50,27 @@ export function PublicShell({
 
   const hasSocialLinks = socialLinks.some((item) => Boolean(item.href));
 
+  const renderNav = (className: string) => (
+    <nav className={className} aria-label="ناوبری اصلی">
+      {navItems.map((item) => (
+        <Link
+          href={item.href}
+          key={item.key}
+          className={activeNav === item.key ? styles.navActive : undefined}
+          aria-current={activeNav === item.key ? "page" : undefined}
+        >
+          {item.label}
+        </Link>
+      ))}
+    </nav>
+  );
+
   return (
     <div className={styles.page}>
       <header className={styles.siteHeader}>
         <div className={styles.headerTop}>
           <Link className={styles.brand} href="/" aria-label="مرکز نیکوکاری آینه">
-            <img src="/brand/logo.png" alt="" width={64} height={64} />
+            <img src="/brand/logo.png" alt="" width={56} height={56} />
             <strong>مرکز نیکوکاری آینه</strong>
           </Link>
 
@@ -56,12 +82,17 @@ export function PublicShell({
           </Link>
         </div>
 
-        <nav className={styles.nav} aria-label="ناوبری اصلی">
-          <Link href="/services">خدمات</Link>
-          <Link href="/projects">طرح‌ها</Link>
-          <Link href="/transparency">گزارش‌ها</Link>
-          <Link href="/about">درباره ما</Link>
-        </nav>
+        {renderNav(styles.nav)}
+
+        <details className={styles.mobileMenu}>
+          <summary className={styles.mobileMenuButton} aria-label="باز کردن منو">
+            <img src="/brand/menu.svg" alt="" width={20} height={20} />
+          </summary>
+          {renderNav(styles.mobileMenuPanel)}
+          <Link className={styles.mobileMenuContact} href="/contact">
+            ارتباط با ما
+          </Link>
+        </details>
       </header>
 
       {children}
