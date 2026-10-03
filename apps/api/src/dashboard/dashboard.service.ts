@@ -22,7 +22,7 @@ export class DashboardService {
       latestContributions,
       reviewQueue,
       recentRequests,
-    ] = await this.prisma.$transaction([
+    ] = await Promise.all([
       canViewProjects
         ? this.prisma.project.count({ where: { status: ProjectStatus.ACTIVE } })
         : Promise.resolve(null),
