@@ -71,10 +71,10 @@ test("public projects are queried as active + visible and ordered by displayOrde
 });
 
 test("project detail requires a public project and only queries published related documents", async () => {
-  let captured: Record<string, any> | undefined;
+  let captured: Record<string, unknown> | undefined;
 
   const service = makeService({
-    async findFirst(args: Record<string, any>) {
+    async findFirst(args: Record<string, unknown>) {
       captured = args;
       return {
         id: "project-1",
@@ -127,7 +127,15 @@ test("project detail requires a public project and only queries published relate
     status: ProjectStatus.ACTIVE,
     visibility: true,
   });
-  assert.deepEqual(captured?.select.transparencyDocuments.where, {
+  const select = captured?.select as
+    | {
+        transparencyDocuments?: {
+          where?: unknown;
+        };
+      }
+    | undefined;
+
+  assert.deepEqual(select?.transparencyDocuments?.where, {
     publishStatus: PublishStatus.PUBLISHED,
   });
   assert.equal(result.imageUrl, "https://cdn.example/projects/mah.jpg");
