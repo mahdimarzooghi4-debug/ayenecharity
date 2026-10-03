@@ -7,6 +7,7 @@ import { HealthController } from "./health.controller";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { MediaModule } from "./media/media.module";
 import { ProjectsModule } from "./projects/projects.module";
+import { PublicModule } from "./public/public.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProjectsModule } from "./projects/projects.module";
     MediaModule,
     ProjectsModule,
     DashboardModule,
+    PublicModule,
   ],
   controllers: [HealthController],
 })
