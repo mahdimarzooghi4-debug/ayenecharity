@@ -8,10 +8,10 @@ import { AdminShell } from "./components/admin-shell";
 
 interface DashboardData {
   metrics: {
-    activeProjects: number;
-    contributions: number;
-    pendingReceipts: number;
-    cooperationRequests: number;
+    activeProjects: number | null;
+    contributions: number | null;
+    pendingReceipts: number | null;
+    cooperationRequests: number | null;
   };
   latestContributions: Array<{
     id: string;
@@ -141,7 +141,7 @@ function Metric({
   accent = false,
 }: {
   label: string;
-  value: number | undefined;
+  value: number | null | undefined;
   accent?: boolean;
 }) {
   return (
@@ -150,7 +150,7 @@ function Metric({
         <span className={accent ? styles.metricIconAccent : styles.metricIcon}>•</span>
         <span>{label}</span>
       </div>
-      <strong>{value === undefined ? "—" : faNumber.format(value)}</strong>
+      <strong>{value == null ? "—" : faNumber.format(value)}</strong>
     </article>
   );
 }
