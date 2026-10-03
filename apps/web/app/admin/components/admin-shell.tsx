@@ -109,7 +109,7 @@ export function AdminShell({ title, subtitle, children }: Props) {
             const active =
               item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
 
-            if (item.future) {
+            if ("future" in item && item.future) {
               return (
                 <span className={styles.navItemDisabled} key={item.href} aria-disabled="true">
                   <span>{item.label}</span>
