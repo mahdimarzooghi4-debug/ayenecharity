@@ -12,7 +12,13 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "pnpm --filter @ayene/api db:generate",
+    "db:validate": "pnpm --filter @ayene/api db:validate",
+    "db:migrate": "pnpm --filter @ayene/api db:migrate",
+    "db:migrate:deploy": "pnpm --filter @ayene/api db:migrate:deploy"
   },
   "devDependencies": {
     "@eslint/js": "9.35.0",
