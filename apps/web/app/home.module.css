@@ -479,6 +479,7 @@
 
 .projectCard {
   min-width: 0;
+  direction: ltr;
   min-height: 170px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 168px;
@@ -494,6 +495,7 @@
 
 .projectContent {
   min-width: 0;
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -504,6 +506,7 @@
 
 .projectBadge,
 .transparencyBadge {
+  direction: rtl;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -652,6 +655,7 @@
 
 .transparencyFooter {
   margin-top: auto;
+  direction: ltr;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -660,6 +664,7 @@
 
 .transparencyLink {
   min-height: 44px;
+  direction: rtl;
   border: 1px solid #0049bc;
   border-radius: 14px;
   padding: 10px 14px;
@@ -674,6 +679,7 @@
 
 .cta {
   padding: 64px var(--page-pad);
+  direction: ltr;
   background: linear-gradient(90deg, #0049bc 0%, #003a96 100%);
   display: flex;
   align-items: center;
@@ -683,6 +689,7 @@
 
 .cta h2 {
   width: min(720px, 100%);
+  direction: rtl;
   margin: 0;
   color: #ffffff;
   font-size: 36px;
