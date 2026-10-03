@@ -1,0 +1,270 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  FINANCE
+  PROJECT_MANAGER
+  CONTENT_MANAGER
+}
+
+enum AdminUserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum ContributionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransparencyDocumentType {
+  PERFORMANCE_REPORT
+  LICENSE
+  FINANCIAL_DOCUMENT
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum CooperationRequestStatus {
+  NEW
+  IN_REVIEW
+  RESPONDED
+  CLOSED
+}
+
+enum MediaVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum MediaPurpose {
+  PROJECT_IMAGE
+  HERO_IMAGE
+  RECEIPT
+  TRANSPARENCY_DOCUMENT
+  OTHER
+}
+
+model AdminUser {
+  id           String          @id @default(uuid()) @db.Uuid
+  email        String          @unique
+  passwordHash String
+  fullName     String
+  role         AdminRole
+  status       AdminUserStatus @default(ACTIVE)
+  lastLoginAt  DateTime?       @db.Timestamptz(3)
+  createdAt    DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime        @updatedAt @db.Timestamptz(3)
+
+  reviewedContributions          Contribution[]        @relation("ContributionReviewer")
+  createdTransparencyDocuments  TransparencyDocument[] @relation("TransparencyDocumentCreator")
+  updatedTransparencyDocuments  TransparencyDocument[] @relation("TransparencyDocumentUpdater")
+  updatedHeroSlides              HeroSlide[]            @relation("HeroSlideUpdater")
+  updatedSiteContents            SiteContent[]          @relation("SiteContentUpdater")
+  updatedSettings                Setting[]              @relation("SettingUpdater")
+  uploadedMediaAssets            MediaAsset[]           @relation("MediaUploader")
+  auditLogs                      AuditLog[]              @relation("AuditActor")
+
+  @@index([status, role])
+}
+
+model Project {
+  id               String        @id @default(uuid()) @db.Uuid
+  slug             String        @unique
+  title            String
+  shortDescription String
+  description      String
+  mainImageAssetId String?       @db.Uuid
+  status           ProjectStatus @default(DRAFT)
+  visibility       Boolean       @default(false)
+  displayOrder     Int           @default(0)
+  publishedAt      DateTime?     @db.Timestamptz(3)
+  createdAt        DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime      @updatedAt @db.Timestamptz(3)
+
+  mainImage             MediaAsset?             @relation("ProjectMainImage", fields: [mainImageAssetId], references: [id], onDelete: SetNull)
+  mediaAssets           MediaAsset[]            @relation("ProjectMedia")
+  contributions         Contribution[]
+  transparencyDocuments TransparencyDocument[]
+
+  @@index([status, visibility, displayOrder])
+  @@index([publishedAt])
+}
+
+model Contribution {
+  id                 String             @id @default(uuid()) @db.Uuid
+  projectId          String             @db.Uuid
+  contributorName    String
+  contributorPhone   String
+  contributorEmail   String?
+  declaredAmountRial BigInt
+  receiptAssetId     String             @unique @db.Uuid
+  contributorNote    String?
+  status             ContributionStatus @default(PENDING)
+  rejectionReason    String?
+  reviewedById       String?            @db.Uuid
+  reviewedAt         DateTime?          @db.Timestamptz(3)
+  version            Int                @default(1)
+  createdAt          DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime           @updatedAt @db.Timestamptz(3)
+
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  receipt    MediaAsset @relation("ContributionReceipt", fields: [receiptAssetId], references: [id], onDelete: Restrict)
+  reviewedBy AdminUser? @relation("ContributionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([projectId, status, createdAt])
+  @@index([status, createdAt])
+  @@index([reviewedById])
+}
+
+model TransparencyDocument {
+  id            String                   @id @default(uuid()) @db.Uuid
+  title         String
+  type          TransparencyDocumentType
+  description   String?
+  projectId     String?                  @db.Uuid
+  fileAssetId   String?                  @db.Uuid
+  documentDate  DateTime?                @db.Timestamptz(3)
+  publishStatus PublishStatus            @default(DRAFT)
+  createdById   String                   @db.Uuid
+  updatedById   String?                  @db.Uuid
+  publishedAt   DateTime?                @db.Timestamptz(3)
+  createdAt     DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime                 @updatedAt @db.Timestamptz(3)
+
+  project   Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  file      MediaAsset? @relation("TransparencyDocumentFile", fields: [fileAssetId], references: [id], onDelete: SetNull)
+  createdBy AdminUser   @relation("TransparencyDocumentCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  updatedBy AdminUser?  @relation("TransparencyDocumentUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([type, publishStatus, publishedAt])
+  @@index([projectId, publishStatus])
+  @@index([createdById])
+}
+
+model CooperationRequest {
+  id                        String                   @id @default(uuid()) @db.Uuid
+  fullName                  String
+  organizationOrProjectName String?
+  phone                     String
+  email                     String?
+  requestType               String
+  message                   String
+  status                    CooperationRequestStatus @default(NEW)
+  internalNote              String?
+  createdAt                 DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt                 DateTime                 @updatedAt @db.Timestamptz(3)
+
+  @@index([status, createdAt])
+  @@index([phone])
+}
+
+model MediaAsset {
+  id           String          @id @default(uuid()) @db.Uuid
+  storageKey   String          @unique
+  originalName String
+  mimeType     String
+  sizeBytes    BigInt
+  visibility   MediaVisibility
+  purpose      MediaPurpose
+  checksum     String?
+  projectId    String?         @db.Uuid
+  uploadedById String?         @db.Uuid
+  createdAt    DateTime        @default(now()) @db.Timestamptz(3)
+
+  project             Project?               @relation("ProjectMedia", fields: [projectId], references: [id], onDelete: SetNull)
+  uploadedBy          AdminUser?             @relation("MediaUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+  projectMainImageFor Project[]              @relation("ProjectMainImage")
+  receiptFor          Contribution?          @relation("ContributionReceipt")
+  documentFor         TransparencyDocument[] @relation("TransparencyDocumentFile")
+  heroSlides          HeroSlide[]
+
+  @@index([visibility, purpose, createdAt])
+  @@index([projectId])
+  @@index([uploadedById])
+}
+
+model HeroSlide {
+  id           String     @id @default(uuid()) @db.Uuid
+  imageAssetId String     @db.Uuid
+  title        String
+  description  String
+  ctaLabel     String?
+  ctaTarget    String?
+  displayOrder Int        @default(0)
+  active       Boolean    @default(false)
+  updatedById  String?    @db.Uuid
+  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime   @updatedAt @db.Timestamptz(3)
+
+  imageAsset MediaAsset @relation(fields: [imageAssetId], references: [id], onDelete: Restrict)
+  updatedBy  AdminUser? @relation("HeroSlideUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([active, displayOrder])
+  @@index([updatedById])
+}
+
+model SiteContent {
+  id          String    @id @default(uuid()) @db.Uuid
+  key         String    @unique
+  value       Json
+  updatedById String?   @db.Uuid
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+
+  updatedBy AdminUser? @relation("SiteContentUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([updatedById])
+}
+
+model Setting {
+  id          String    @id @default(uuid()) @db.Uuid
+  key         String    @unique
+  value       Json
+  isPublic    Boolean   @default(false)
+  updatedById String?   @db.Uuid
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+
+  updatedBy AdminUser? @relation("SettingUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([isPublic])
+  @@index([updatedById])
+}
+
+model AuditLog {
+  id            String    @id @default(uuid()) @db.Uuid
+  actorId       String?   @db.Uuid
+  action        String
+  entityType    String
+  entityId      String?
+  previousValue Json?
+  newValue      Json?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
+
+  actor AdminUser? @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
