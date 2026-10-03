@@ -16,6 +16,22 @@ export interface PublicProjectPreview {
   imageUrl: string | null;
 }
 
+export interface PublicProjectReport {
+  id: string;
+  title: string;
+  type: "PERFORMANCE_REPORT" | "LICENSE" | "FINANCIAL_DOCUMENT";
+  description: string | null;
+  documentDate: string | null;
+  publishedAt: string | null;
+  fileUrl: string | null;
+}
+
+export interface PublicProjectDetail extends PublicProjectPreview {
+  description: string | null;
+  publishedAt: string | null;
+  reports: PublicProjectReport[];
+}
+
 export interface PublicTransparencyPreview {
   type: "PERFORMANCE_REPORT" | "LICENSE" | "FINANCIAL_DOCUMENT";
   label: string;
@@ -31,20 +47,33 @@ export interface PublicHomeData {
   settings: PublicSettings;
 }
 
+export interface PublicProjectsData {
+  items: PublicProjectPreview[];
+}
+
+export type PublicProjectLoadResult =
+  | { status: "ok"; project: PublicProjectDetail }
+  | { status: "not-found" }
+  | { status: "unavailable" };
+
 const API_BASE = (
   process.env.API_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   "http://localhost:3001"
 ).replace(/\/+$/, "");
 
+async function publicFetch(path: string): Promise<Response> {
+  return fetch(API_BASE + path, {
+    cache: "no-store",
+    headers: {
+      accept: "application/json",
+    },
+  });
+}
+
 export async function loadPublicHome(): Promise<PublicHomeData> {
   try {
-    const response = await fetch(API_BASE + "/api/public/home", {
-      cache: "no-store",
-      headers: {
-        accept: "application/json",
-      },
-    });
+    const response = await publicFetch("/api/public/home");
 
     if (!response.ok) {
       throw new Error("Public homepage API returned " + response.status);
@@ -62,6 +91,53 @@ export async function loadPublicHome(): Promise<PublicHomeData> {
       ],
       settings: {},
     };
+  }
+}
+
+export async function loadSiteSettings(): Promise<PublicSettings> {
+  try {
+    const response = await publicFetch("/api/public/site-settings");
+    if (!response.ok) {
+      throw new Error("Public site settings API returned " + response.status);
+    }
+    return (await response.json()) as PublicSettings;
+  } catch {
+    return {};
+  }
+}
+
+export async function loadPublicProjects(): Promise<PublicProjectsData> {
+  try {
+    const response = await publicFetch("/api/public/projects");
+    if (!response.ok) {
+      throw new Error("Public projects API returned " + response.status);
+    }
+    return (await response.json()) as PublicProjectsData;
+  } catch {
+    return { items: [] };
+  }
+}
+
+export async function loadPublicProject(slug: string): Promise<PublicProjectLoadResult> {
+  try {
+    const response = await publicFetch(
+      "/api/public/projects/" + encodeURIComponent(slug),
+    );
+
+    if (response.status === 404) {
+      return { status: "not-found" };
+    }
+
+    if (!response.ok) {
+      return { status: "unavailable" };
+    }
+
+    return {
+      status: "ok",
+      project: (await response.json()) as PublicProjectDetail,
+    };
+  } catch {
+    return { status: "unavailable" };
   }
 }
 
