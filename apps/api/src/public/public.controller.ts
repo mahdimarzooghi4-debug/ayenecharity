@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 
 import { PublicService } from "./public.service";
 
@@ -11,8 +11,23 @@ export class PublicController {
     return this.publicService.getHome();
   }
 
+  @Get("site-settings")
+  siteSettings() {
+    return this.publicService.getSiteSettings();
+  }
+
   @Get("settings")
   settings() {
     return this.publicService.getPublicSettings();
+  }
+
+  @Get("projects")
+  projects() {
+    return this.publicService.listProjects();
+  }
+
+  @Get("projects/:slug")
+  project(@Param("slug") slug: string) {
+    return this.publicService.getProjectBySlug(slug);
   }
 }

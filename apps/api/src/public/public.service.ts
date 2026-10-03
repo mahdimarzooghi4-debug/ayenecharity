@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import {
   MediaPurpose,
   MediaVisibility,
@@ -24,6 +24,10 @@ export class PublicService {
 
   async getPublicSettings() {
     return this.getSettingsByKeys(PUBLIC_SETTING_KEYS);
+  }
+
+  async getSiteSettings() {
+    return this.getSettingsByKeys(PUBLIC_HOME_SETTING_KEYS);
   }
 
   private async getSettingsByKeys(keys: readonly string[]) {
@@ -81,11 +85,12 @@ export class PublicService {
             select: {
               storageKey: true,
               visibility: true,
+              purpose: true,
             },
           },
         },
       }),
-      this.getSettingsByKeys(PUBLIC_HOME_SETTING_KEYS),
+      this.getSiteSettings(),
       this.prisma.transparencyDocument.groupBy({
         by: ["type"],
         where: { publishStatus: PublishStatus.PUBLISHED },
@@ -115,16 +120,7 @@ export class PublicService {
           imageUrl: this.storage.publicUrl(slide.imageAsset.storageKey),
         }))
         .filter((slide) => Boolean(slide.imageUrl)),
-      projects: projects.map((project) => ({
-        id: project.id,
-        slug: project.slug,
-        title: project.title,
-        shortDescription: project.shortDescription,
-        imageUrl:
-          project.mainImage?.visibility === MediaVisibility.PUBLIC
-            ? this.storage.publicUrl(project.mainImage.storageKey)
-            : null,
-      })),
+      projects: projects.map((project) => this.toProjectPreview(project)),
       transparency: [
         {
           type: TransparencyDocumentType.PERFORMANCE_REPORT,
@@ -144,5 +140,146 @@ export class PublicService {
       ],
       settings,
     };
+  }
+
+  async listProjects() {
+    const projects = await this.prisma.project.findMany({
+      where: {
+        status: ProjectStatus.ACTIVE,
+        visibility: true,
+      },
+      orderBy: [{ displayOrder: "asc" }, { publishedAt: "desc" }],
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        shortDescription: true,
+        mainImage: {
+          select: {
+            storageKey: true,
+            visibility: true,
+            purpose: true,
+          },
+        },
+      },
+    });
+
+    return {
+      items: projects.map((project) => this.toProjectPreview(project)),
+    };
+  }
+
+  async getProjectBySlug(slug: string) {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        slug,
+        status: ProjectStatus.ACTIVE,
+        visibility: true,
+      },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        shortDescription: true,
+        description: true,
+        publishedAt: true,
+        mainImage: {
+          select: {
+            storageKey: true,
+            visibility: true,
+            purpose: true,
+          },
+        },
+        transparencyDocuments: {
+          where: {
+            publishStatus: PublishStatus.PUBLISHED,
+          },
+          orderBy: [{ documentDate: "desc" }, { publishedAt: "desc" }],
+          select: {
+            id: true,
+            title: true,
+            type: true,
+            description: true,
+            documentDate: true,
+            publishedAt: true,
+            file: {
+              select: {
+                storageKey: true,
+                visibility: true,
+                purpose: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException({
+        code: "PROJECT_NOT_FOUND",
+        message: "Project was not found.",
+      });
+    }
+
+    return {
+      id: project.id,
+      slug: project.slug,
+      title: project.title,
+      shortDescription: project.shortDescription,
+      description: project.description,
+      publishedAt: project.publishedAt,
+      imageUrl: this.publicProjectImageUrl(project.mainImage),
+      reports: project.transparencyDocuments.map((document) => ({
+        id: document.id,
+        title: document.title,
+        type: document.type,
+        description: document.description,
+        documentDate: document.documentDate,
+        publishedAt: document.publishedAt,
+        fileUrl:
+          document.file?.visibility === MediaVisibility.PUBLIC &&
+          document.file.purpose === MediaPurpose.TRANSPARENCY_DOCUMENT
+            ? this.storage.publicUrl(document.file.storageKey)
+            : null,
+      })),
+    };
+  }
+
+  private toProjectPreview(project: {
+    id: string;
+    slug: string;
+    title: string;
+    shortDescription: string | null;
+    mainImage: {
+      storageKey: string;
+      visibility: MediaVisibility;
+      purpose: MediaPurpose;
+    } | null;
+  }) {
+    return {
+      id: project.id,
+      slug: project.slug,
+      title: project.title,
+      shortDescription: project.shortDescription,
+      imageUrl: this.publicProjectImageUrl(project.mainImage),
+    };
+  }
+
+  private publicProjectImageUrl(
+    asset: {
+      storageKey: string;
+      visibility: MediaVisibility;
+      purpose: MediaPurpose;
+    } | null,
+  ): string | null {
+    if (
+      !asset ||
+      asset.visibility !== MediaVisibility.PUBLIC ||
+      asset.purpose !== MediaPurpose.PROJECT_IMAGE
+    ) {
+      return null;
+    }
+
+    return this.storage.publicUrl(asset.storageKey);
   }
 }
