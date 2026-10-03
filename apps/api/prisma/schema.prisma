@@ -107,8 +107,8 @@ model Project {
   id               String        @id @default(uuid()) @db.Uuid
   slug             String        @unique
   title            String
-  shortDescription String
-  description      String
+  shortDescription String?
+  description      String?
   mainImageAssetId String?       @db.Uuid
   status           ProjectStatus @default(DRAFT)
   visibility       Boolean       @default(false)
