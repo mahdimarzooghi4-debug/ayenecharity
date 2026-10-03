@@ -50,7 +50,7 @@ export function PublicShell({
 
   const hasSocialLinks = socialLinks.some((item) => Boolean(item.href));
 
-  const renderNav = (className: string) => (
+  const renderNav = (className: string | undefined) => (
     <nav className={className} aria-label="ناوبری اصلی">
       {navItems.map((item) => (
         <Link
