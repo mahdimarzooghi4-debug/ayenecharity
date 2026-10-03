@@ -17,7 +17,12 @@
   gap: 24px;
 }
 
+.headerTop {
+  display: contents;
+}
+
 .brand {
+  order: 1;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -40,6 +45,7 @@
 }
 
 .nav {
+  order: 2;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -64,6 +70,10 @@
   background: #f2f7ff;
   color: #0049bc;
   outline: none;
+}
+
+.headerContact {
+  order: 3;
 }
 
 .primaryButton,
@@ -115,6 +125,7 @@
 
 .hero {
   min-height: 472px;
+  direction: ltr;
   padding: 48px var(--page-pad);
   display: grid;
   grid-template-columns: 560px minmax(0, 1fr);
@@ -125,6 +136,7 @@
 
 .heroCopy {
   min-width: 0;
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
