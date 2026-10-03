@@ -174,9 +174,18 @@ export default function AdminProjectsPage() {
                   <td>{faNumber.format(project.contributionCount)}</td>
                   <td>{faDate.format(new Date(project.updatedAt))}</td>
                   <td>
-                    <span className={project.visibility ? styles.visibilityOn : styles.visibilityOff}>
-                      {project.visibility ? "نمایش" : "مخفی"}
-                    </span>
+                    {project.status === "ACTIVE" ? (
+                      <button
+                        type="button"
+                        className={project.visibility ? styles.visibilityOn : styles.visibilityOff}
+                        disabled={busyId === project.id}
+                        onClick={() => changeState(project, "ACTIVE", !project.visibility)}
+                      >
+                        {project.visibility ? "نمایش" : "مخفی"}
+                      </button>
+                    ) : (
+                      <span className={styles.visibilityOff}>مخفی</span>
+                    )}
                   </td>
                   <td>
                     <div className={styles.rowActions}>
