@@ -65,11 +65,9 @@ export class AuthController {
   }
 
   private requestContext(request: AdminHttpRequest): RequestContext {
-    const userAgent = request.headers["user-agent"];
-
     return {
       ipAddress: request.ip ?? request.socket?.remoteAddress,
-      userAgent: typeof userAgent === "string" ? userAgent : userAgent?.join(", "),
+      userAgent: request.headers["user-agent"],
     };
   }
 }
