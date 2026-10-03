@@ -37,6 +37,8 @@ V1 exposes only these setting keys, and only when their row has `isPublic=true`:
 
 Footer contact/social information must come from Settings. It must not be duplicated in `SiteContent`.
 
+The homepage payload includes only center contact and social settings. Contribution card details are deliberately excluded from `/api/public/home` and are available only through the broader public-settings contract for contribution-specific flows.
+
 The public UI omits missing settings; it does not render realistic-looking placeholder addresses, phone numbers, social links, or card details.
 
 ## Transparency preview
