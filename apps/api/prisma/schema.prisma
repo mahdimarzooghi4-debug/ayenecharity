@@ -82,8 +82,25 @@ model AdminUser {
   updatedSettings                Setting[]              @relation("SettingUpdater")
   uploadedMediaAssets            MediaAsset[]           @relation("MediaUploader")
   auditLogs                      AuditLog[]              @relation("AuditActor")
+  sessions                       AdminSession[]
 
   @@index([status, role])
+}
+
+model AdminSession {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  tokenHash  String    @unique
+  expiresAt  DateTime  @db.Timestamptz(3)
+  revokedAt  DateTime? @db.Timestamptz(3)
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+
+  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
 }
 
 model Project {

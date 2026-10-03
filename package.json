@@ -18,7 +18,8 @@
     "db:generate": "pnpm --filter @ayene/api db:generate",
     "db:validate": "pnpm --filter @ayene/api db:validate",
     "db:migrate": "pnpm --filter @ayene/api db:migrate",
-    "db:migrate:deploy": "pnpm --filter @ayene/api db:migrate:deploy"
+    "db:migrate:deploy": "pnpm --filter @ayene/api db:migrate:deploy",
+    "admin:bootstrap": "pnpm --filter @ayene/api admin:bootstrap"
   },
   "devDependencies": {
     "@eslint/js": "9.35.0",
