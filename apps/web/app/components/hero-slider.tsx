@@ -28,7 +28,7 @@ export function HeroSlider({ slides }: { slides: PublicHeroSlide[] }) {
   }
 
   const activeIndex = Math.min(index, safeSlides.length - 1);
-  const active = safeSlides[activeIndex];
+  const active = safeSlides[activeIndex]!;
 
   function previous() {
     setIndex((current) => (current - 1 + safeSlides.length) % safeSlides.length);
