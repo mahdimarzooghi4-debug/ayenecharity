@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { PublicShell } from "../../components/public-shell";
 import {
+  loadContributionSettings,
   loadPublicProject,
   loadSiteSettings,
   type PublicProjectReport,
 } from "../../../lib/public-api";
+import { ContributionDialogButton } from "./contribution-dialog";
 import styles from "../projects.module.css";
 
 export const dynamic = "force-dynamic";
@@ -83,9 +84,10 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [result, settings] = await Promise.all([
+  const [result, settings, contributionSettings] = await Promise.all([
     getProject(slug),
     loadSiteSettings(),
+    loadContributionSettings(),
   ]);
 
   if (result.status === "not-found") {
@@ -124,9 +126,13 @@ export default async function ProjectDetailPage({
             {project.shortDescription ? (
               <p className={styles.detailLead}>{project.shortDescription}</p>
             ) : null}
-            <Link className={styles.detailPrimaryAction} href="#participation">
-              مشارکت در طرح
-            </Link>
+            <ContributionDialogButton
+              projectId={project.id}
+              projectTitle={project.title}
+              cardNumber={contributionSettings.cardNumber}
+              cardHolder={contributionSettings.cardHolder}
+              variant="primary"
+            />
           </div>
 
           {project.imageUrl ? (
@@ -196,9 +202,13 @@ export default async function ProjectDetailPage({
         </section>
 
         <section className={styles.participationCta} id="participation" aria-labelledby="participation-title">
-          <button className={styles.participationButton} type="button" aria-disabled="true">
-            مشارکت در طرح
-          </button>
+          <ContributionDialogButton
+            projectId={project.id}
+            projectTitle={project.title}
+            cardNumber={contributionSettings.cardNumber}
+            cardHolder={contributionSettings.cardHolder}
+            variant="secondary"
+          />
           <div className={styles.participationCopy}>
             <h2 id="participation-title">همراه این طرح شوید</h2>
             <p>مشارکت در این طرح از طریق شماره کارت مرکز نیکوکاری آینه انجام می‌شود.</p>
