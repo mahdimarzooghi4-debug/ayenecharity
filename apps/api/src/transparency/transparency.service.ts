@@ -165,6 +165,7 @@ export class TransparencyService {
             mimeType: true,
             sizeBytes: true,
             visibility: true,
+            storageKey: true,
           },
         },
         createdBy: {
