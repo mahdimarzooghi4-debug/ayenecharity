@@ -21,10 +21,12 @@ export function PublicShell({
   settings,
   children,
   activeNav,
+  contactActive = false,
 }: {
   settings: PublicSettings;
   children: ReactNode;
   activeNav?: ActiveNav;
+  contactActive?: boolean;
 }) {
   const address = publicSetting(settings, "center.address");
   const phone = publicSetting(settings, "center.phone");
@@ -75,7 +77,7 @@ export function PublicShell({
           </Link>
 
           <Link
-            className={`${styles.primaryButton} ${styles.headerContact}`}
+            className={`${contactActive ? styles.secondaryButton : styles.primaryButton} ${styles.headerContact}`}
             href="/contact"
           >
             ارتباط با ما
