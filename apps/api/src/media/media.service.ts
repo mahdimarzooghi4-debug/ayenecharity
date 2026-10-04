@@ -66,6 +66,26 @@ export class MediaService {
     });
   }
 
+  async discardUnreferencedReceipt(id: string): Promise<void> {
+    const asset = await this.prisma.mediaAsset.findUnique({
+      where: { id },
+      include: {
+        receiptFor: { select: { id: true } },
+      },
+    });
+
+    if (
+      !asset ||
+      asset.purpose !== MediaPurpose.RECEIPT ||
+      asset.receiptFor
+    ) {
+      return;
+    }
+
+    await this.storage.deleteObject(asset.storageKey);
+    await this.prisma.mediaAsset.delete({ where: { id: asset.id } });
+  }
+
   async getAdminAccessUrl(
     id: string,
     admin: AuthenticatedAdmin,
