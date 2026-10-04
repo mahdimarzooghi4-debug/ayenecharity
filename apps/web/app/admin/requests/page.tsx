@@ -99,7 +99,7 @@ function isoEnd(value: string): string {
 }
 
 function statusClass(status: RequestStatus): string {
-  return styles["requestStatus" + status];
+  return styles["requestStatus" + status] ?? "";
 }
 
 export default function AdminRequestsPage() {
