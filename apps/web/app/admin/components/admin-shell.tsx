@@ -62,7 +62,11 @@ const navItems: readonly NavItem[] = [
     label: "محتوای سایت",
     roles: ["SUPER_ADMIN", "CONTENT_MANAGER"],
   },
-  { href: "/admin/settings", label: "تنظیمات", future: true },
+  {
+    href: "/admin/settings",
+    label: "تنظیمات",
+    roles: ["SUPER_ADMIN"],
+  },
 ];
 
 export function AdminShell({ title, subtitle, children }: Props) {
