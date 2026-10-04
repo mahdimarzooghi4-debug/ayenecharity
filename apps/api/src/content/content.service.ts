@@ -22,7 +22,6 @@ import {
   HOME_CONTENT,
   HOME_CONTENT_KEYS,
   isHomeContentKey,
-  type HomeContentKey,
 } from "./content.constants";
 import type {
   CreateHeroSlideDto,
