@@ -51,6 +51,11 @@ export interface PublicProjectsData {
   items: PublicProjectPreview[];
 }
 
+export interface PublicContributionSettings {
+  cardNumber: string | null;
+  cardHolder: string | null;
+}
+
 export type PublicProjectLoadResult =
   | { status: "ok"; project: PublicProjectDetail }
   | { status: "not-found" }
@@ -103,6 +108,26 @@ export async function loadSiteSettings(): Promise<PublicSettings> {
     return (await response.json()) as PublicSettings;
   } catch {
     return {};
+  }
+}
+
+export async function loadContributionSettings(): Promise<PublicContributionSettings> {
+  try {
+    const response = await publicFetch("/api/public/settings");
+    if (!response.ok) {
+      throw new Error("Public contribution settings API returned " + response.status);
+    }
+
+    const settings = (await response.json()) as PublicSettings;
+    return {
+      cardNumber: publicSetting(settings, "contribution.cardNumber"),
+      cardHolder: publicSetting(settings, "contribution.cardHolder"),
+    };
+  } catch {
+    return {
+      cardNumber: null,
+      cardHolder: null,
+    };
   }
 }
 
