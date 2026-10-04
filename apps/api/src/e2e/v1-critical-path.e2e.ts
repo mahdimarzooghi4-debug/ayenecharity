@@ -15,7 +15,6 @@ import {
 } from "@prisma/client";
 import { hash } from "bcryptjs";
 
-import { AppModule } from "../app.module";
 import { PASSWORD_HASH_ROUNDS } from "../auth/auth.constants";
 import {
   configuredWebOrigins,
@@ -66,7 +65,12 @@ async function login(email: string): Promise<LoginSession> {
     body: JSON.stringify({ email, password }),
   });
 
-  assert.equal(response.status, 200);
+  if (response.status !== 200) {
+    const body = await response.text();
+    assert.fail(
+      "admin login failed with " + response.status + ": " + body,
+    );
+  }
   const setCookie = response.headers.get("set-cookie");
   assert.ok(setCookie, "login must set the admin session cookie");
 
@@ -257,6 +261,7 @@ before(async () => {
   process.env.S3_FORCE_PATH_STYLE = "true";
   process.env.PUBLIC_MEDIA_BASE_URL = s3BaseUrl + "/ayene-e2e";
 
+  const { AppModule } = await import("../app.module");
   app = await NestFactory.create(AppModule, { logger: false });
   app.setGlobalPrefix("api");
   app.enableCors({
