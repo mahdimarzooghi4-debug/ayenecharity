@@ -28,15 +28,30 @@ const roleLabels: Record<AdminUser["role"], string> = {
   CONTENT_MANAGER: "محتوا",
 };
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  future?: boolean;
+  roles?: readonly AdminUser["role"][];
+}
+
+const navItems: readonly NavItem[] = [
   { href: "/admin", label: "داشبورد" },
-  { href: "/admin/projects", label: "طرح‌ها" },
-  { href: "/admin/contributions", label: "مشارکت‌ها", future: true },
+  {
+    href: "/admin/projects",
+    label: "طرح‌ها",
+    roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
+  },
+  {
+    href: "/admin/contributions",
+    label: "مشارکت‌ها",
+    roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER"],
+  },
   { href: "/admin/transparency", label: "گزارش و شفافیت", future: true },
   { href: "/admin/requests", label: "درخواست‌ها", future: true },
   { href: "/admin/content", label: "محتوای سایت", future: true },
   { href: "/admin/settings", label: "تنظیمات", future: true },
-] as const;
+];
 
 export function AdminShell({ title, subtitle, children }: Props) {
   const pathname = usePathname();
@@ -109,7 +124,11 @@ export function AdminShell({ title, subtitle, children }: Props) {
             const active =
               item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
 
-            if ("future" in item && item.future) {
+            const unavailable =
+              item.future ||
+              (item.roles ? !item.roles.includes(user.role) : false);
+
+            if (unavailable) {
               return (
                 <span className={styles.navItemDisabled} key={item.href} aria-disabled="true">
                   <span>{item.label}</span>
