@@ -80,3 +80,10 @@ When a category has no published records, the UI may show a neutral “در دس
 The transparency page reads only from `GET /api/public/transparency`. Draft records are never rendered. Each category displays actual published records when available and a neutral empty state otherwise.
 
 Published document files are linked only when their media asset is public and has `TRANSPARENCY_DOCUMENT` purpose. No placeholder license numbers, financial amounts, dates or document titles are generated.
+
+
+## Settings source of truth
+
+Footer/contact/social values and participation card information are read from public Setting rows. The canonical participation keys are `contribution.cardNumber` and `contribution.accountHolderName`; card data is not duplicated on Project records.
+
+Missing public contact/card/social values remain empty. The public UI must show a neutral unavailable state rather than inventing addresses, account data or URLs.
