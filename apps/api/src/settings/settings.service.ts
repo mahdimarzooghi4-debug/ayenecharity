@@ -170,13 +170,20 @@ export class SettingsService {
           previousValue: Object.fromEntries(
             definitions.map(([, definition]) => [
               definition.key,
-              currentMap.get(definition.key) ?? definition.defaultValue,
+              this.auditValue(
+                definition.key,
+                currentMap.get(definition.key) ??
+                  definition.defaultValue,
+              ),
             ]),
           ),
           newValue: Object.fromEntries(
             definitions.map(([name, definition]) => [
               definition.key,
-              values[name as SettingName] ?? "",
+              this.auditValue(
+                definition.key,
+                values[name as SettingName] ?? "",
+              ),
             ]),
           ),
           ipAddress: context.ipAddress,
@@ -262,6 +269,14 @@ export class SettingsService {
     }
 
     return parsed.toString();
+  }
+
+  private auditValue(key: string, value: string): string {
+    if (key === "contribution.cardNumber" && value) {
+      return "[REDACTED]";
+    }
+
+    return value;
   }
 
   private stringValue(value: Prisma.JsonValue | undefined): string | null {
