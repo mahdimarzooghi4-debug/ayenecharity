@@ -10,7 +10,7 @@ interface ContributionDialogButtonProps {
   projectId: string;
   projectTitle: string;
   cardNumber: string | null;
-  cardHolder: string | null;
+  accountHolderName: string | null;
   variant: "primary" | "secondary";
 }
 
@@ -43,7 +43,7 @@ export function ContributionDialogButton({
   projectId,
   projectTitle,
   cardNumber,
-  cardHolder,
+  accountHolderName,
   variant,
 }: ContributionDialogButtonProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -188,7 +188,9 @@ export function ContributionDialogButton({
                 ) : (
                   <strong>اطلاعات کارت هنوز منتشر نشده است.</strong>
                 )}
-                {cardHolder ? <small>نام صاحب حساب: {cardHolder}</small> : null}
+                {accountHolderName ? (
+                  <small>نام صاحب حساب: {accountHolderName}</small>
+                ) : null}
               </div>
 
               {copyStatus ? (
