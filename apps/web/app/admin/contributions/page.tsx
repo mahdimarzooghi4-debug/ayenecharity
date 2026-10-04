@@ -172,41 +172,41 @@ export default function AdminContributionsPage() {
 
       <div className={styles.contributionsToolbar}>
         <div className={styles.contributionFilters}>
-          <label className={styles.compactFilter}>
-            <img
-              src="/admin/contributions/calendar.svg"
-              alt=""
-              width={16}
-              height={16}
-            />
-            <input
-              type="date"
-              value={from}
-              onChange={(event) => {
-                setFrom(event.target.value);
-                setPage(1);
-              }}
-              aria-label="از تاریخ"
-            />
-          </label>
-
-          <label className={styles.compactFilter}>
-            <img
-              src="/admin/contributions/calendar.svg"
-              alt=""
-              width={16}
-              height={16}
-            />
-            <input
-              type="date"
-              value={to}
-              onChange={(event) => {
-                setTo(event.target.value);
-                setPage(1);
-              }}
-              aria-label="تا تاریخ"
-            />
-          </label>
+          <details className={styles.dateRangeFilter}>
+            <summary>
+              <img
+                src="/admin/contributions/calendar.svg"
+                alt=""
+                width={16}
+                height={16}
+              />
+              <span>{from || to ? "بازه انتخاب‌شده" : "بازه زمانی"}</span>
+            </summary>
+            <div className={styles.dateRangePanel}>
+              <label>
+                از تاریخ
+                <input
+                  type="date"
+                  value={from}
+                  onChange={(event) => {
+                    setFrom(event.target.value);
+                    setPage(1);
+                  }}
+                />
+              </label>
+              <label>
+                تا تاریخ
+                <input
+                  type="date"
+                  value={to}
+                  onChange={(event) => {
+                    setTo(event.target.value);
+                    setPage(1);
+                  }}
+                />
+              </label>
+            </div>
+          </details>
 
           <label className={styles.compactFilter}>
             <img
