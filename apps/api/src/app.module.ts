@@ -9,6 +9,7 @@ import { DashboardModule } from "./dashboard/dashboard.module";
 import { MediaModule } from "./media/media.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { PublicModule } from "./public/public.module";
+import { RequestsModule } from "./requests/requests.module";
 import { TransparencyModule } from "./transparency/transparency.module";
 
 @Module({
@@ -24,6 +25,7 @@ import { TransparencyModule } from "./transparency/transparency.module";
     ProjectsModule,
     DashboardModule,
     PublicModule,
+    RequestsModule,
     TransparencyModule,
   ],
   controllers: [HealthController],
