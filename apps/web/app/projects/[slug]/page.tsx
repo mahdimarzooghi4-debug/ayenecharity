@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
@@ -9,10 +10,11 @@ import {
   loadSiteSettings,
   type PublicProjectReport,
 } from "../../../lib/public-api";
+import { SITE_NAME } from "../../../lib/seo";
 import { ContributionDialogButton } from "./contribution-dialog";
 import styles from "../projects.module.css";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 const getProject = cache(loadPublicProject);
 
@@ -43,12 +45,50 @@ export async function generateMetadata({
   if (result.status !== "ok") {
     return {
       title: "طرح نیکوکاری | مرکز نیکوکاری آینه",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const canonical =
+    "/projects/" + encodeURIComponent(result.project.slug);
+  const title = result.project.title + " | " + SITE_NAME;
+  const description =
+    result.project.shortDescription ??
+    "جزئیات طرح نیکوکاری " + result.project.title + " و مسیر همراهی با آن.";
+
   return {
-    title: result.project.title + " | مرکز نیکوکاری آینه",
-    description: result.project.shortDescription ?? undefined,
+    title,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: SITE_NAME,
+      locale: "fa_IR",
+      type: "article",
+      images: result.project.imageUrl
+        ? [
+            {
+              url: result.project.imageUrl,
+              alt: "تصویر طرح " + result.project.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: result.project.imageUrl ? "summary_large_image" : "summary",
+      title,
+      description,
+      images: result.project.imageUrl
+        ? [result.project.imageUrl]
+        : undefined,
+    },
   };
 }
 
@@ -97,7 +137,7 @@ export default async function ProjectDetailPage({
   if (result.status === "unavailable") {
     return (
       <PublicShell settings={settings} activeNav="projects">
-        <main>
+        <main id="main-content">
           <section className={styles.internalHero}>
             <span className={styles.internalEyebrow}>طرح‌های نیکوکاری</span>
             <h1>اطلاعات طرح در دسترس نیست</h1>
@@ -117,7 +157,7 @@ export default async function ProjectDetailPage({
 
   return (
     <PublicShell settings={settings} activeNav="projects">
-      <main>
+      <main id="main-content">
         <section className={styles.detailHero}>
           <div className={styles.detailIntro}>
             <span className={styles.breadcrumb}>طرح‌ها&nbsp;&nbsp;/&nbsp;&nbsp;{project.title}</span>
@@ -136,7 +176,15 @@ export default async function ProjectDetailPage({
           </div>
 
           {project.imageUrl ? (
-            <img className={styles.detailImage} src={project.imageUrl} alt="" />
+            <Image
+              className={styles.detailImage}
+              src={project.imageUrl}
+              alt={"تصویر طرح " + project.title}
+              width={1080}
+              height={620}
+              sizes="(max-width: 820px) calc(100vw - 40px), (max-width: 1100px) 45vw, 540px"
+              priority
+            />
           ) : (
             <span className={styles.detailImageFallback} aria-hidden="true">
               <img src="/brand/logo.png" alt="" width={88} height={88} />
