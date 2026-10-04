@@ -130,7 +130,7 @@ export default async function ProjectDetailPage({
               projectId={project.id}
               projectTitle={project.title}
               cardNumber={contributionSettings.cardNumber}
-              cardHolder={contributionSettings.cardHolder}
+              accountHolderName={contributionSettings.accountHolderName}
               variant="primary"
             />
           </div>
@@ -206,7 +206,7 @@ export default async function ProjectDetailPage({
             projectId={project.id}
             projectTitle={project.title}
             cardNumber={contributionSettings.cardNumber}
-            cardHolder={contributionSettings.cardHolder}
+            accountHolderName={contributionSettings.accountHolderName}
             variant="secondary"
           />
           <div className={styles.participationCopy}>
