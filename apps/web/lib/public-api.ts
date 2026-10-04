@@ -92,7 +92,7 @@ export interface PublicProjectsData {
 
 export interface PublicContributionSettings {
   cardNumber: string | null;
-  cardHolder: string | null;
+  accountHolderName: string | null;
 }
 
 export type PublicProjectLoadResult =
@@ -168,12 +168,15 @@ export async function loadContributionSettings(): Promise<PublicContributionSett
     const settings = (await response.json()) as PublicSettings;
     return {
       cardNumber: publicSetting(settings, "contribution.cardNumber"),
-      cardHolder: publicSetting(settings, "contribution.cardHolder"),
+      accountHolderName: publicSetting(
+        settings,
+        "contribution.accountHolderName",
+      ),
     };
   } catch {
     return {
       cardNumber: null,
-      cardHolder: null,
+      accountHolderName: null,
     };
   }
 }
