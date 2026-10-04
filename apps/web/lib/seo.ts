@@ -9,6 +9,7 @@ export function siteUrl(): URL {
   const configured =
     process.env.SITE_URL?.trim() ||
     process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    process.env.WEB_ORIGIN?.split(",")[0]?.trim() ||
     DEFAULT_SITE_URL;
 
   try {
