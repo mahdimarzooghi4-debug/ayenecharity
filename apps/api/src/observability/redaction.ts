@@ -5,6 +5,8 @@ const SECRET_TEXT_PATTERNS: Array<[RegExp, string]> = [
   [/Bearer\s+[A-Za-z0-9._~+\/-]+=*/gi, "Bearer [REDACTED]"],
   [/(ayene_admin_session=)[^;\s]+/gi, "$1[REDACTED]"],
   [/([?&](?:token|secret|password|session)=)[^&#\s]+/gi, "$1[REDACTED]"],
+  [/([a-z][a-z0-9+.-]*:\/\/[^:\s/@]+:)[^@\s/]+@/gi, "$1[REDACTED]@"],
+  [/(access[_-]?key|secret[_-]?key|api[_-]?key)([=:]\s*)[^\s,;]+/gi, "$1$2[REDACTED]"],
 ];
 
 export function redactText(value: string): string {
