@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
+import { ContentModule } from "./content/content.module";
+
 import { AuthModule } from "./auth/auth.module";
 import { ContributionsModule } from "./contributions/contributions.module";
 import { DatabaseModule } from "./database/database.module";
@@ -21,6 +23,7 @@ import { TransparencyModule } from "./transparency/transparency.module";
     DatabaseModule,
     AuthModule,
     ContributionsModule,
+    ContentModule,
     MediaModule,
     ProjectsModule,
     DashboardModule,
