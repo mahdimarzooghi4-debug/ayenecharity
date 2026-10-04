@@ -2745,6 +2745,7 @@
 .contentLowerGrid {
   width: 100%;
   min-height: 464px;
+  direction: ltr;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 430px;
   gap: 16px;
@@ -2753,6 +2754,7 @@
 .homeContentBlocks,
 .footerSourceCard {
   min-width: 0;
+  direction: rtl;
   min-height: 464px;
   padding: 16px;
   border: 1px solid #e2e8f0;
