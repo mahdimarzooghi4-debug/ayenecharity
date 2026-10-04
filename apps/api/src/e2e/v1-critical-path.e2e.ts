@@ -59,16 +59,18 @@ async function requestJson<T>(
 }
 
 async function login(email: string): Promise<LoginSession> {
-  const { response } = await requestJson("/api/admin/auth/login", {
+  const { response, body } = await requestJson("/api/admin/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
     body: JSON.stringify({ email, password }),
   });
 
   if (response.status !== 200) {
-    const body = await response.text();
     assert.fail(
-      "admin login failed with " + response.status + ": " + body,
+      "admin login failed with " +
+        response.status +
+        ": " +
+        JSON.stringify(body),
     );
   }
   const setCookie = response.headers.get("set-cookie");
