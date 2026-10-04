@@ -26,6 +26,11 @@ export class PublicController {
     return this.publicService.listProjects();
   }
 
+  @Get("transparency")
+  transparency() {
+    return this.publicService.listTransparency();
+  }
+
   @Get("projects/:slug")
   project(@Param("slug") slug: string) {
     return this.publicService.getProjectBySlug(slug);

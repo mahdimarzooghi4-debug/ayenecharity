@@ -142,6 +142,97 @@ export class PublicService {
     };
   }
 
+  async listTransparency() {
+    const documents = await this.prisma.transparencyDocument.findMany({
+      where: {
+        publishStatus: PublishStatus.PUBLISHED,
+      },
+      orderBy: [
+        { type: "asc" },
+        { documentDate: "desc" },
+        { publishedAt: "desc" },
+      ],
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        description: true,
+        documentDate: true,
+        publishedAt: true,
+        project: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+          },
+        },
+        file: {
+          select: {
+            storageKey: true,
+            visibility: true,
+            purpose: true,
+          },
+        },
+      },
+    });
+
+    const grouped = {
+      [TransparencyDocumentType.PERFORMANCE_REPORT]: [],
+      [TransparencyDocumentType.LICENSE]: [],
+      [TransparencyDocumentType.FINANCIAL_DOCUMENT]: [],
+    } as Record<
+      TransparencyDocumentType,
+      Array<{
+        id: string;
+        title: string;
+        description: string | null;
+        documentDate: Date | null;
+        publishedAt: Date | null;
+        project: { id: string; slug: string; title: string } | null;
+        fileUrl: string | null;
+      }>
+    >;
+
+    for (const document of documents) {
+      grouped[document.type].push({
+        id: document.id,
+        title: document.title,
+        description: document.description,
+        documentDate: document.documentDate,
+        publishedAt: document.publishedAt,
+        project: document.project,
+        fileUrl:
+          document.file?.visibility === MediaVisibility.PUBLIC &&
+          document.file.purpose === MediaPurpose.TRANSPARENCY_DOCUMENT
+            ? this.storage.publicUrl(document.file.storageKey)
+            : null,
+      });
+    }
+
+    return {
+      categories: [
+        {
+          type: TransparencyDocumentType.PERFORMANCE_REPORT,
+          label: "گزارش عملکرد",
+          description: "گزارش فعالیت‌ها و نتیجه اجرای طرح‌ها",
+          documents: grouped[TransparencyDocumentType.PERFORMANCE_REPORT],
+        },
+        {
+          type: TransparencyDocumentType.LICENSE,
+          label: "مجوزها",
+          description: "مجوزها و اطلاعات رسمی مرکز",
+          documents: grouped[TransparencyDocumentType.LICENSE],
+        },
+        {
+          type: TransparencyDocumentType.FINANCIAL_DOCUMENT,
+          label: "اسناد مالی",
+          description: "اسناد و مدارک مالی مرتبط با فعالیت‌های نیکوکاری",
+          documents: grouped[TransparencyDocumentType.FINANCIAL_DOCUMENT],
+        },
+      ],
+    };
+  }
+
   async listProjects() {
     const projects = await this.prisma.project.findMany({
       where: {

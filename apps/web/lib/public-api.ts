@@ -32,10 +32,40 @@ export interface PublicProjectDetail extends PublicProjectPreview {
   reports: PublicProjectReport[];
 }
 
+export type PublicTransparencyType =
+  | "PERFORMANCE_REPORT"
+  | "LICENSE"
+  | "FINANCIAL_DOCUMENT";
+
 export interface PublicTransparencyPreview {
-  type: "PERFORMANCE_REPORT" | "LICENSE" | "FINANCIAL_DOCUMENT";
+  type: PublicTransparencyType;
   label: string;
   count: number;
+}
+
+export interface PublicTransparencyDocument {
+  id: string;
+  title: string;
+  description: string | null;
+  documentDate: string | null;
+  publishedAt: string | null;
+  project: {
+    id: string;
+    slug: string;
+    title: string;
+  } | null;
+  fileUrl: string | null;
+}
+
+export interface PublicTransparencyCategory {
+  type: PublicTransparencyType;
+  label: string;
+  description: string;
+  documents: PublicTransparencyDocument[];
+}
+
+export interface PublicTransparencyData {
+  categories: PublicTransparencyCategory[];
 }
 
 export type PublicSettings = Record<string, unknown>;
@@ -127,6 +157,39 @@ export async function loadContributionSettings(): Promise<PublicContributionSett
     return {
       cardNumber: null,
       cardHolder: null,
+    };
+  }
+}
+
+export async function loadPublicTransparency(): Promise<PublicTransparencyData> {
+  try {
+    const response = await publicFetch("/api/public/transparency");
+    if (!response.ok) {
+      throw new Error("Public transparency API returned " + response.status);
+    }
+    return (await response.json()) as PublicTransparencyData;
+  } catch {
+    return {
+      categories: [
+        {
+          type: "PERFORMANCE_REPORT",
+          label: "گزارش عملکرد",
+          description: "گزارش فعالیت‌ها و نتیجه اجرای طرح‌ها",
+          documents: [],
+        },
+        {
+          type: "LICENSE",
+          label: "مجوزها",
+          description: "مجوزها و اطلاعات رسمی مرکز",
+          documents: [],
+        },
+        {
+          type: "FINANCIAL_DOCUMENT",
+          label: "اسناد مالی",
+          description: "اسناد و مدارک مالی مرتبط با فعالیت‌های نیکوکاری",
+          documents: [],
+        },
+      ],
     };
   }
 }
