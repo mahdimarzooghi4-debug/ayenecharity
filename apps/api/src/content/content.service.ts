@@ -14,6 +14,7 @@ import type {
   RequestContext,
 } from "../auth/auth.types";
 import { PrismaService } from "../database/prisma.service";
+import { hasPermissions, Permission } from "../auth/permissions";
 import { ObjectStorageService } from "../media/object-storage.service";
 import {
   defaultHomeContent,
@@ -78,8 +79,7 @@ export class ContentService {
       heroSlides: slides.map((slide) => this.toHeroSlideResponse(slide)),
       blocks,
       capabilities: {
-        update: actor.role === "SUPER_ADMIN" ||
-          actor.role === "CONTENT_MANAGER",
+        update: hasPermissions(actor.role, [Permission.CONTENT_UPDATE]),
       },
       limits: {
         maxActiveHeroSlides: MAX_ACTIVE_HERO_SLIDES,
