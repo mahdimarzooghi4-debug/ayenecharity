@@ -1,0 +1,66 @@
+name: V1 Release Gate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  staging-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: staging
+    env:
+      DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      STAGING_API_URL: ${{ secrets.STAGING_API_URL }}
+      STAGING_WEB_URL: ${{ secrets.STAGING_WEB_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate staging secrets
+        run: |
+          test -n "$DATABASE_URL"
+          test -n "$STAGING_API_URL"
+          test -n "$STAGING_WEB_URL"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate and generate Prisma
+        run: |
+          pnpm db:validate
+          pnpm db:generate
+
+      - name: Verify pre-migration backup and restore
+        run: pnpm qa:backup-restore
+
+      - name: Apply staging migrations
+        run: pnpm db:migrate:deploy
+
+      - name: Verify migration status
+        run: pnpm --filter @ayene/api exec prisma migrate status
+
+      - name: Run staging smoke checks
+        run: pnpm qa:smoke
+
+      - name: Release gate summary
+        run: |
+          echo "V1 staging gate passed." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Backup/restore: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Migrations: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- API readiness: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public/admin smoke: passed" >> "$GITHUB_STEP_SUMMARY"
