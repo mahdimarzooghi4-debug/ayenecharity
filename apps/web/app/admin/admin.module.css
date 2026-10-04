@@ -1584,3 +1584,376 @@
     height: 220px;
   }
 }
+
+
+/* Transparency management — Figma 114:6179 / drawer 114:6357 */
+.transparencyHeader {
+  min-height: 66px;
+  margin-bottom: 16px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.transparencyHeader > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.transparencyHeader h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.transparencyHeader p {
+  margin: 3px 0 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.transparencyTabsRow {
+  min-height: 40px;
+  margin-bottom: 16px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.transparencyTabs {
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transparencyTab,
+.transparencyTabActive {
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 16px;
+  background: #fff;
+  color: #475569;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.transparencyTabActive {
+  border-color: #0049bc;
+  background: #f2f7ff;
+  color: #0049bc;
+  font-weight: 700;
+}
+
+.transparencyTable {
+  min-width: 1030px;
+}
+
+.transparencyTable th,
+.transparencyTable td {
+  height: 54px;
+}
+
+.transparencyTable th:nth-child(1),
+.transparencyTable td:nth-child(1) {
+  min-width: 250px;
+}
+
+.transparencyTable th:nth-child(2),
+.transparencyTable td:nth-child(2) {
+  width: 170px;
+}
+
+.transparencyTable th:nth-child(3),
+.transparencyTable td:nth-child(3) {
+  width: 120px;
+}
+
+.transparencyTable th:nth-child(4),
+.transparencyTable td:nth-child(4) {
+  width: 130px;
+}
+
+.transparencyTable th:nth-child(5),
+.transparencyTable td:nth-child(5) {
+  width: 145px;
+}
+
+.transparencyTable th:nth-child(6),
+.transparencyTable td:nth-child(6) {
+  width: 145px;
+}
+
+.transparencyTable th:nth-child(7),
+.transparencyTable td:nth-child(7) {
+  width: 120px;
+}
+
+.transparencyTitle {
+  display: block;
+  max-width: 310px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.transparencyPublished,
+.transparencyDraft {
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.transparencyPublished {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.transparencyPublished::before,
+.transparencyDraft::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.transparencyDraft {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.transparencyFile {
+  max-width: 135px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #0049bc;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.transparencyFile img {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.transparencyFile span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transparencyFile:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.mutedText {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.transparencyDrawer {
+  width: min(380px, calc(100vw - 24px));
+  height: 100%;
+  border-right: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(5, 20, 46, .1);
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.transparencyDrawerHeader {
+  min-height: 104px;
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.transparencyDrawerHeader > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.transparencyDrawerHeader h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.transparencyDrawerHeader p {
+  margin: 4px 0 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.transparencyDrawerHeader button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.transparencyDrawerHeader button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.transparencyDrawerHeader img {
+  width: 18px;
+  height: 18px;
+}
+
+.transparencyForm {
+  min-height: 0;
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.transparencyForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.transparencyForm input,
+.transparencyForm select,
+.transparencyForm textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  outline: none;
+}
+
+.transparencyForm textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.transparencyForm input:focus,
+.transparencyForm select:focus,
+.transparencyForm textarea:focus {
+  border-color: #0049bc;
+  box-shadow: 0 0 0 3px rgba(0, 73, 188, .08);
+}
+
+.transparencyForm input:disabled,
+.transparencyForm select:disabled,
+.transparencyForm textarea:disabled {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.transparencyForm input[type="file"] {
+  padding: 8px 10px;
+}
+
+.transparencyForm small {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.transparencyDrawerSpacer {
+  flex: 1 1 auto;
+  min-height: 24px;
+}
+
+.transparencySave {
+  width: 100%;
+  min-height: 47px;
+  border: 0;
+  border-radius: 16px;
+  padding: 0 16px;
+  background: #0049bc;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.transparencySave:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 820px) {
+  .transparencyHeader,
+  .transparencyTabsRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .transparencyTabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .transparencyTab,
+  .transparencyTabActive {
+    flex: 0 0 auto;
+  }
+
+  .transparencyDrawer {
+    width: min(380px, 100vw);
+  }
+}
