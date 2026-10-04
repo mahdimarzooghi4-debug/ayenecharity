@@ -7,15 +7,17 @@ import {
   safeExternalUrl,
 } from "../../lib/public-api";
 import { ContactForm } from "./contact-form";
+import { staticPageMetadata } from "../../lib/seo";
 import styles from "./contact.module.css";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = staticPageMetadata({
   title: "تماس و همکاری | مرکز نیکوکاری آینه",
   description:
     "ارسال درخواست همکاری و راه‌های ارتباط با مرکز نیکوکاری آینه.",
-};
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const settings = await loadSiteSettings();
@@ -47,7 +49,7 @@ export default async function ContactPage() {
 
   return (
     <PublicShell settings={settings} contactActive>
-      <main>
+      <main id="main-content">
         <section className={styles.hero}>
           <span className={styles.eyebrow}>تماس و همکاری</span>
           <h1>برای همکاری با آینه</h1>
