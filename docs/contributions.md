@@ -48,3 +48,29 @@ The initial desktop modal and mobile bottom sheet follow the frozen Figma states
 After receipt submission, the UI states only that the receipt is awaiting center review. It does not claim the payment was bank-verified.
 
 The browser posts to the same-origin Next.js route `/api/contributions`, which forwards the multipart payload to the Nest API. This keeps backend deployment URLs out of client-side flow configuration.
+
+
+## Admin review workflow
+
+Admin list and review endpoints:
+
+- `GET /api/admin/contributions`
+- `GET /api/admin/contributions/:id/receipt-url`
+- `PATCH /api/admin/contributions/:id/review`
+
+The list supports search plus project, status, and created-at date-range filters, pagination, and sorting. Amounts and receipt sizes are serialized as decimal strings so no JavaScript floating-point conversion is required.
+
+Receipt access uses the existing protected Media access layer. Private receipt storage keys are never returned; authorized admins receive a temporary signed URL.
+
+Review rules:
+
+- only a `PENDING` Contribution can be reviewed
+- Finance and Super Admin have review permissions
+- rejection requires `rejectionReason`
+- the client must send the Contribution `version` it loaded
+- the update is guarded by `id + PENDING status + version`
+- a concurrent/stale second update returns `409 Conflict`
+- `reviewedById`, `reviewedAt`, and incremented `version` are saved atomically
+- approve/reject writes an AuditLog entry with previous/new status and version
+
+The admin UI follows the frozen contributions table and receipt-review panel in Figma. The review panel is closed by default and only opened by a receipt action.
