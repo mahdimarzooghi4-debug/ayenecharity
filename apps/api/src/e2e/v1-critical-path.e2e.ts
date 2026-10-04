@@ -264,7 +264,7 @@ before(async () => {
   process.env.PUBLIC_MEDIA_BASE_URL = s3BaseUrl + "/ayene-e2e";
 
   const { AppModule } = await import("../app.module");
-  app = await NestFactory.create(AppModule, { logger: false });
+  app = await NestFactory.create(AppModule, { logger: ["error"] });
   app.setGlobalPrefix("api");
   app.enableCors({
     origin: configuredWebOrigins(),
