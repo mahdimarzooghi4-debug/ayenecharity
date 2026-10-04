@@ -6,8 +6,8 @@ import { ContentModule } from "./content/content.module";
 import { AuthModule } from "./auth/auth.module";
 import { ContributionsModule } from "./contributions/contributions.module";
 import { DatabaseModule } from "./database/database.module";
-import { HealthController } from "./health.controller";
 import { DashboardModule } from "./dashboard/dashboard.module";
+import { HealthModule } from "./health.module";
 import { MediaModule } from "./media/media.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { PublicModule } from "./public/public.module";
@@ -29,12 +29,13 @@ import { TransparencyModule } from "./transparency/transparency.module";
     MediaModule,
     ProjectsModule,
     DashboardModule,
+    HealthModule,
     PublicModule,
     RequestsModule,
     SettingsModule,
     TransparencyModule,
     UsersModule,
   ],
-  controllers: [HealthController],
+  controllers: [],
 })
 export class AppModule {}
