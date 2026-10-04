@@ -54,6 +54,7 @@ export const ROLE_PERMISSIONS: Record<AdminRole, readonly Permission[]> = {
     Permission.PROJECTS_STATUS,
     Permission.CONTRIBUTIONS_VIEW,
     Permission.TRANSPARENCY_VIEW,
+    Permission.REQUESTS_VIEW,
   ],
   [AdminRole.CONTENT_MANAGER]: [
     Permission.PROJECTS_VIEW,
@@ -62,6 +63,9 @@ export const ROLE_PERMISSIONS: Record<AdminRole, readonly Permission[]> = {
     Permission.TRANSPARENCY_UPDATE,
     Permission.TRANSPARENCY_PUBLISH,
     Permission.TRANSPARENCY_DELETE,
+    Permission.REQUESTS_VIEW,
+    Permission.REQUESTS_UPDATE_STATUS,
+    Permission.REQUESTS_ADD_INTERNAL_NOTE,
     Permission.CONTENT_VIEW,
     Permission.CONTENT_UPDATE,
   ],
