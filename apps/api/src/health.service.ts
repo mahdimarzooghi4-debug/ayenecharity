@@ -6,11 +6,11 @@ import {
 import { PrismaService } from "./database/prisma.service";
 import { ObjectStorageService } from "./media/object-storage.service";
 
-interface DependencyHealth {
+export interface DependencyHealth {
   status: "ok" | "unavailable";
 }
 
-interface ReadinessResponse {
+export interface ReadinessResponse {
   status: "ok";
   dependencies: {
     database: DependencyHealth;
