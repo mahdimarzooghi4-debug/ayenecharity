@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 
+import { AuthModule } from "../auth/auth.module";
 import { RequestRateLimitGuard } from "./request-rate-limit.guard";
 import {
   AdminRequestsController,
@@ -8,6 +9,7 @@ import {
 import { RequestsService } from "./requests.service";
 
 @Module({
+  imports: [AuthModule],
   controllers: [
     PublicRequestsController,
     AdminRequestsController,
