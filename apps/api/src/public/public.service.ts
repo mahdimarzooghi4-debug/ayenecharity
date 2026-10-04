@@ -8,6 +8,11 @@ import {
 } from "@prisma/client";
 
 import { PrismaService } from "../database/prisma.service";
+import {
+  defaultHomeContent,
+  HOME_CONTENT,
+  HOME_CONTENT_KEYS,
+} from "../content/content.constants";
 import { ObjectStorageService } from "../media/object-storage.service";
 import {
   normalizePublicSettings,
@@ -46,7 +51,7 @@ export class PublicService {
   }
 
   async getHome() {
-    const [heroSlides, projects, settings, transparencyGroups] = await Promise.all([
+    const [heroSlides, projects, settings, transparencyGroups, contentRows] = await Promise.all([
       this.prisma.heroSlide.findMany({
         where: {
           active: true,
@@ -96,6 +101,10 @@ export class PublicService {
         where: { publishStatus: PublishStatus.PUBLISHED },
         _count: { _all: true },
       }),
+      this.prisma.siteContent.findMany({
+        where: { key: { in: [...HOME_CONTENT_KEYS] } },
+        select: { key: true, value: true },
+      }),
     ]);
 
     const transparencyCounts: Record<TransparencyDocumentType, number> = {
@@ -108,7 +117,23 @@ export class PublicService {
       transparencyCounts[group.type] = group._count._all;
     }
 
+    const contentMap = new Map(
+      contentRows.map((row) => [row.key, row.value]),
+    );
+    const contentDefaults = defaultHomeContent();
+    const content = Object.fromEntries(
+      Object.entries(HOME_CONTENT).map(([name, definition]) => {
+        const stored = contentMap.get(definition.key);
+        const value =
+          typeof stored === "string" && stored.trim()
+            ? stored.trim()
+            : contentDefaults[name as keyof typeof contentDefaults];
+        return [name, value];
+      }),
+    );
+
     return {
+      content,
       heroSlides: heroSlides
         .map((slide) => ({
           id: slide.id,

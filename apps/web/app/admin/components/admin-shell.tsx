@@ -57,7 +57,11 @@ const navItems: readonly NavItem[] = [
     label: "درخواست‌ها",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
-  { href: "/admin/content", label: "محتوای سایت", future: true },
+  {
+    href: "/admin/content",
+    label: "محتوای سایت",
+    roles: ["SUPER_ADMIN", "CONTENT_MANAGER"],
+  },
   { href: "/admin/settings", label: "تنظیمات", future: true },
 ];
 

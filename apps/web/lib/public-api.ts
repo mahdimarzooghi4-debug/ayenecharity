@@ -70,7 +70,16 @@ export interface PublicTransparencyData {
 
 export type PublicSettings = Record<string, unknown>;
 
+export interface PublicHomeContent {
+  heroTitle: string;
+  heroDescription: string;
+  servicesTitle: string;
+  projectsTitle: string;
+  finalCtaText: string;
+}
+
 export interface PublicHomeData {
+  content: PublicHomeContent;
   heroSlides: PublicHeroSlide[];
   projects: PublicProjectPreview[];
   transparency: PublicTransparencyPreview[];
@@ -117,6 +126,14 @@ export async function loadPublicHome(): Promise<PublicHomeData> {
     return (await response.json()) as PublicHomeData;
   } catch {
     return {
+      content: {
+        heroTitle: "از نیت خیر تا اثر واقعی",
+        heroDescription:
+          "طرح‌های فعال نیکوکاری را ببینید و در مسیری که برایتان مهم است همراه شوید.",
+        servicesTitle: "زیرساخت یک نیکوکاری شفاف",
+        projectsTitle: "این طرح‌ها منتظر همراهی‌اند",
+        finalCtaText: "یک همراهی کوچک، می‌تواند یک اثر واقعی بسازد",
+      },
       heroSlides: [],
       projects: [],
       transparency: [

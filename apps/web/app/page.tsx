@@ -67,10 +67,8 @@ export default async function HomePage() {
 
           <div className={styles.heroCopy}>
             <div className={styles.eyebrow}>مرکز نیکوکاری آینه</div>
-            <h1 id="home-title">از نیت خیر تا اثر واقعی</h1>
-            <p className={styles.heroLead}>
-              طرح‌های فعال نیکوکاری را ببینید و در مسیری که برایتان مهم است همراه شوید.
-            </p>
+            <h1 id="home-title">{data.content.heroTitle}</h1>
+            <p className={styles.heroLead}>{data.content.heroDescription}</p>
             <div className={styles.heroActions}>
               <Link
                 className={`${styles.primaryButton} ${styles.largeButton}`}
@@ -95,7 +93,7 @@ export default async function HomePage() {
         >
           <div className={styles.sectionHeader}>
             <span className={styles.sectionEyebrow}>خدمات</span>
-            <h2 id="services-title">زیرساخت یک نیکوکاری شفاف</h2>
+            <h2 id="services-title">{data.content.servicesTitle}</h2>
           </div>
 
           <div className={styles.serviceGrid}>
@@ -144,7 +142,7 @@ export default async function HomePage() {
         >
           <div className={styles.sectionHeader}>
             <span className={styles.sectionEyebrow}>طرح‌ها</span>
-            <h2 id="projects-title">این طرح‌ها منتظر همراهی‌اند</h2>
+            <h2 id="projects-title">{data.content.projectsTitle}</h2>
           </div>
 
           <div className={styles.projectGrid}>
@@ -235,7 +233,7 @@ export default async function HomePage() {
           <Link className={styles.secondaryButton} href="/projects">
             مشاهده طرح‌ها
           </Link>
-          <h2>یک همراهی کوچک، می‌تواند یک اثر واقعی بسازد</h2>
+          <h2>{data.content.finalCtaText}</h2>
         </section>
       </main>
     </PublicShell>
