@@ -96,6 +96,7 @@ export class TransparencyService {
               mimeType: true,
               sizeBytes: true,
               visibility: true,
+              storageKey: true,
             },
           },
           createdBy: {
@@ -616,6 +617,7 @@ export class TransparencyService {
       mimeType: string;
       sizeBytes: bigint;
       visibility: MediaVisibility;
+      storageKey: string;
     } | null;
     createdBy: {
       id: string;
@@ -643,9 +645,7 @@ export class TransparencyService {
             visibility: document.file.visibility,
             publicUrl:
               document.file.visibility === MediaVisibility.PUBLIC
-                ? this.storage.publicUrl(
-                    this.requireStorageKeyPlaceholder(),
-                  )
+                ? this.storage.publicUrl(document.file.storageKey)
                 : null,
           }
         : null,
@@ -659,7 +659,4 @@ export class TransparencyService {
     };
   }
 
-  private requireStorageKeyPlaceholder(): string {
-    return "";
-  }
 }
