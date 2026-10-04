@@ -198,15 +198,18 @@ test("list supports status/type/date/search filters and pagination", async () =>
   } as unknown as PrismaService;
 
   const service = new RequestsService(prisma);
-  const result = await service.list({
-    page: 1,
-    pageSize: 25,
-    search: "آینه",
-    status: CooperationRequestStatus.NEW,
-    requestType: "VOLUNTEER",
-    from: "2026-10-01T00:00:00.000Z",
-    to: "2026-10-05T23:59:59.999Z",
-  });
+  const result = await service.list(
+    {
+      page: 1,
+      pageSize: 25,
+      search: "آینه",
+      status: CooperationRequestStatus.NEW,
+      requestType: "VOLUNTEER",
+      from: "2026-10-01T00:00:00.000Z",
+      to: "2026-10-05T23:59:59.999Z",
+    },
+    contentManager,
+  );
 
   assert.ok(capturedWhere);
   assert.equal(result.page, 1);
@@ -214,4 +217,6 @@ test("list supports status/type/date/search filters and pagination", async () =>
     "VOLUNTEER",
     "PROJECT_PROPOSAL",
   ]);
+  assert.equal(result.capabilities.updateStatus, true);
+  assert.equal(result.capabilities.addInternalNote, true);
 });
