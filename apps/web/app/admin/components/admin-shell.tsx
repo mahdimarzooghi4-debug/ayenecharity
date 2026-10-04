@@ -47,7 +47,11 @@ const navItems: readonly NavItem[] = [
     label: "مشارکت‌ها",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER"],
   },
-  { href: "/admin/transparency", label: "گزارش و شفافیت", future: true },
+  {
+    href: "/admin/transparency",
+    label: "گزارش و شفافیت",
+    roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER", "CONTENT_MANAGER"],
+  },
   { href: "/admin/requests", label: "درخواست‌ها", future: true },
   { href: "/admin/content", label: "محتوای سایت", future: true },
   { href: "/admin/settings", label: "تنظیمات", future: true },
