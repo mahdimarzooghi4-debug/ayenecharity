@@ -3,8 +3,11 @@ import { after, before, test } from "node:test";
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 
-import { ValidationPipe } from "@nestjs/common";
-import { NestFactory, type INestApplication } from "@nestjs/core";
+import {
+  ValidationPipe,
+  type INestApplication,
+} from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
 import {
   AdminRole,
   AdminUserStatus,
@@ -37,7 +40,7 @@ interface JsonResponse<T = Record<string, unknown>> {
   body: T;
 }
 
-function jsonHeaders(cookie?: string): HeadersInit {
+function jsonHeaders(cookie?: string): Record<string, string> {
   return {
     accept: "application/json",
     "content-type": "application/json",
