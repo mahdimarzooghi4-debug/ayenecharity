@@ -39,8 +39,11 @@ export class AdminRequestsController {
 
   @Get()
   @AdminProtected(Permission.REQUESTS_VIEW)
-  list(@Query() query: AdminRequestListQueryDto) {
-    return this.requestsService.list(query);
+  list(
+    @Query() query: AdminRequestListQueryDto,
+    @Req() request: AdminHttpRequest,
+  ) {
+    return this.requestsService.list(query, request.adminUser!);
   }
 
   @Get(":id")
