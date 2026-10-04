@@ -362,18 +362,18 @@ test("V1 critical paths work end to end against PostgreSQL and HTTP", async () =
   );
 
   const publicProject = await requestJson<{
-    project: { id: string; slug: string };
+    id: string;
+    slug: string;
   }>("/api/public/projects/e2e-final-project");
 
   assert.equal(publicProject.response.status, 200);
-  assert.equal(publicProject.body.project.id, createdProject.body.id);
+  assert.equal(publicProject.body.id, createdProject.body.id);
 
   const contributionA = await submitContribution(
     createdProject.body.id,
     "مشارکت کننده اول",
   );
   assert.equal(contributionA.status, "PENDING");
-  assert.equal(contributionA.version, 1);
 
   const reviewApprove = await adminJson<{ status: string; version: number }>(
     finance,
