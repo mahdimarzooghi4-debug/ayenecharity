@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadBucketCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -52,6 +53,19 @@ export class ObjectStorageService {
     );
 
     return { url, expiresInSeconds };
+  }
+
+  async healthCheck(): Promise<{ status: "ok" | "unavailable" }> {
+    try {
+      await this.getClient().send(
+        new HeadBucketCommand({
+          Bucket: this.getBucket(),
+        }),
+      );
+      return { status: "ok" };
+    } catch {
+      return { status: "unavailable" };
+    }
   }
 
   publicUrl(key: string): string | null {
