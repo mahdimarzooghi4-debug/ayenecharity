@@ -303,6 +303,8 @@
 
 .detailPrimaryAction {
   min-height: 58px;
+  font: inherit;
+  cursor: pointer;
   padding: 16px 24px;
   border: 1px solid #0049bc;
   border-radius: 16px;
@@ -447,6 +449,7 @@
 
 .participationButton {
   min-width: 160px;
+  cursor: pointer;
   min-height: 60px;
   padding: 16px 24px;
   border: 1px solid #0049bc;
@@ -462,8 +465,13 @@
   font-weight: 700;
 }
 
-.participationButton[aria-disabled="true"] {
-  cursor: default;
+.detailPrimaryAction:disabled,
+.participationButton:disabled,
+.contributionPrimary:disabled,
+.contributionSecondary:disabled,
+.contributionClose:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .participationCopy {
@@ -577,6 +585,30 @@ a.reportCard:focus-visible {
 }
 
 @media (max-width: 820px) {
+  .contributionDialog {
+    width: 100%;
+    max-width: none;
+    max-height: 88dvh;
+    margin: auto 0 0;
+    border-width: 1px 0 0;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .contributionPanel {
+    padding: 24px;
+  }
+
+  .contributionActions {
+    flex-direction: column;
+  }
+
+  .contributionPrimary,
+  .contributionSecondary {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+
   .internalHero {
     min-height: 228px;
     padding: 36px 20px 40px;
@@ -747,4 +779,248 @@ a.reportCard:focus-visible {
   .reportCard {
     min-height: 154px;
   }
+}
+
+/* Contribution flow — initial state follows Figma nodes 99:11923 / 99:12037 */
+.contributionDialog {
+  width: min(480px, calc(100vw - 40px));
+  max-width: 480px;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 16px 40px rgba(5, 20, 46, 0.12);
+  overflow: auto;
+  font: inherit;
+}
+
+.contributionDialog::backdrop {
+  background: rgba(5, 20, 46, 0.42);
+}
+
+.contributionPanel {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  background: #ffffff;
+}
+
+.contributionHeader {
+  width: 100%;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.contributionHeader h2 {
+  direction: rtl;
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 700;
+  text-align: right;
+}
+
+.contributionClose {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #0f172a;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.contributionGuide,
+.contributionFeedback,
+.contributionError {
+  width: 100%;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.contributionGuide {
+  color: #475569;
+}
+
+.contributionFeedback {
+  color: #0049bc;
+}
+
+.contributionError {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.cardBox {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #0049bc;
+  border-radius: 16px;
+  background: #f2f7ff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.cardBox span,
+.cardBox small {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cardBox strong {
+  width: 100%;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.contributionActions {
+  width: 100%;
+  direction: ltr;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.contributionPrimary,
+.contributionSecondary {
+  min-width: 0;
+  min-height: 58px;
+  flex: 1 1 0;
+  padding: 16px 24px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contributionPrimary {
+  border: 1px solid #0049bc;
+  background: #0049bc;
+  color: #ffffff;
+}
+
+.contributionSecondary {
+  border: 1px solid #0049bc;
+  background: #ffffff;
+  color: #0049bc;
+}
+
+.receiptForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  color: #0f172a;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: right;
+}
+
+.formField input,
+.formField textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  outline: none;
+}
+
+.formField input:focus,
+.formField textarea:focus {
+  border-color: #0049bc;
+  box-shadow: 0 0 0 3px rgba(0, 73, 188, 0.08);
+}
+
+.formField textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.formField small {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.formField input[type="file"] {
+  padding: 9px;
+  color: #475569;
+}
+
+.contributionSuccess {
+  width: 100%;
+  min-height: 220px;
+  padding: 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 14px;
+  text-align: right;
+}
+
+.contributionSuccess strong {
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.contributionSuccess p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.contributionSuccess .contributionPrimary {
+  flex: 0 0 auto;
+  width: 100%;
 }
