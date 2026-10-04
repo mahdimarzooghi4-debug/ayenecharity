@@ -37,7 +37,10 @@ export class UpdateCenterSettingsDto {
   @Transform(({ value }) => trim(value))
   @IsString()
   @MaxLength(254)
-  @ValidateIf((object: UpdateCenterSettingsDto) => object.email.length > 0)
+  @ValidateIf(
+    (object: UpdateCenterSettingsDto) =>
+      typeof object.email === "string" && object.email.length > 0,
+  )
   @IsEmail()
   email!: string;
 }
