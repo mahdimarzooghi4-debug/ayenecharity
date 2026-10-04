@@ -9,15 +9,17 @@ import {
   type PublicTransparencyDocument,
   type PublicTransparencyType,
 } from "../../lib/public-api";
+import { staticPageMetadata } from "../../lib/seo";
 import styles from "./transparency.module.css";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = staticPageMetadata({
   title: "شفافیت و گزارش‌ها | مرکز نیکوکاری آینه",
   description:
     "گزارش‌های عملکرد، مجوزها و اسناد مالی منتشرشده مرکز نیکوکاری آینه.",
-};
+  path: "/transparency",
+});
 
 const faNumber = new Intl.NumberFormat("fa-IR");
 const faDate = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
@@ -130,7 +132,7 @@ export default async function TransparencyPage() {
 
   return (
     <PublicShell settings={settings} activeNav="transparency">
-      <main>
+      <main id="main-content">
         <section className={styles.hero}>
           <span className={styles.eyebrow}>شفافیت</span>
           <h1>شفافیت، بخشی از کار ماست</h1>

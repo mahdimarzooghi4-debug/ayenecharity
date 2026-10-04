@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 import type { PublicHeroSlide } from "../../lib/public-api";
@@ -39,12 +40,19 @@ export function HeroSlider({ slides }: { slides: PublicHeroSlide[] }) {
   }
 
   return (
-    <div className={styles.heroVisual}>
-      <img
+    <div
+      className={styles.heroVisual}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="تصاویر فعالیت‌های نیکوکاری"
+    >
+      <Image
         className={styles.heroSlideImage}
         src={active.imageUrl}
         alt={active.title}
-        loading="eager"
+        fill
+        priority
+        sizes="(max-width: 820px) 220px, (max-width: 1100px) 50vw, 560px"
       />
       <span className={styles.heroVisualBadge}>فعالیت نیکوکاری</span>
 

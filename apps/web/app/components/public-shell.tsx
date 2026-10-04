@@ -69,6 +69,9 @@ export function PublicShell({
 
   return (
     <div className={styles.page}>
+      <a className="skip-link" href="#main-content">
+        رفتن به محتوای اصلی
+      </a>
       <header className={styles.siteHeader}>
         <div className={styles.headerTop}>
           <Link className={styles.brand} href="/" aria-label="مرکز نیکوکاری آینه">
@@ -79,6 +82,7 @@ export function PublicShell({
           <Link
             className={`${contactActive ? styles.secondaryButton : styles.primaryButton} ${styles.headerContact}`}
             href="/contact"
+            aria-current={contactActive ? "page" : undefined}
           >
             ارتباط با ما
           </Link>
@@ -91,7 +95,11 @@ export function PublicShell({
             <img src="/brand/menu.svg" alt="" width={20} height={20} />
           </summary>
           {renderNav(styles.mobileMenuPanel)}
-          <Link className={styles.mobileMenuContact} href="/contact">
+          <Link
+            className={styles.mobileMenuContact}
+            href="/contact"
+            aria-current={contactActive ? "page" : undefined}
+          >
             ارتباط با ما
           </Link>
         </details>

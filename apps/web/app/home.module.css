@@ -70,7 +70,11 @@
 .nav .navActive {
   background: #f2f7ff;
   color: #0049bc;
-  outline: none;
+}
+
+.nav a:focus-visible {
+  outline: 3px solid #0049bc;
+  outline-offset: 2px;
 }
 
 .nav .navActive {
@@ -1134,4 +1138,21 @@
     width: 105px;
     height: 120px;
   }
+}
+
+
+.heroPrevious:focus-visible,
+.heroNext:focus-visible,
+.heroIndicator:focus-visible,
+.heroIndicatorActive:focus-visible,
+.socialLink:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.ghostButton:focus-visible,
+.projectLink:focus-visible,
+.transparencyLink:focus-visible,
+.mobileMenuButton:focus-visible,
+.mobileMenuContact:focus-visible {
+  outline: 3px solid #0049bc;
+  outline-offset: 3px;
 }

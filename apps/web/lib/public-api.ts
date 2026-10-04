@@ -106,9 +106,12 @@ const API_BASE = (
   "http://localhost:3001"
 ).replace(/\/+$/, "");
 
-async function publicFetch(path: string): Promise<Response> {
+async function publicFetch(
+  path: string,
+  revalidate = 60,
+): Promise<Response> {
   return fetch(API_BASE + path, {
-    cache: "no-store",
+    next: { revalidate },
     headers: {
       accept: "application/json",
     },

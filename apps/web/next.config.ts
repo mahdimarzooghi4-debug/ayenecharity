@@ -22,8 +22,42 @@ const commonSecurityHeaders = [
     : []),
 ];
 
+function publicMediaPatterns(): NonNullable<
+  NonNullable<NextConfig["images"]>["remotePatterns"]
+> {
+  const raw =
+    process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.trim() ||
+    process.env.PUBLIC_MEDIA_BASE_URL?.trim();
+
+  if (!raw) return [];
+
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      return [];
+    }
+
+    const pathname = url.pathname.replace(/\/+$/, "");
+
+    return [
+      {
+        protocol: url.protocol === "http:" ? "http" : "https",
+        hostname: url.hostname,
+        port: url.port,
+        pathname: pathname ? pathname + "/**" : "/**",
+      },
+    ];
+  } catch {
+    return [];
+  }
+}
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: publicMediaPatterns(),
+  },
   async headers() {
     return [
       {

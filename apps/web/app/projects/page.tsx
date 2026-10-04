@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { PublicShell } from "../components/public-shell";
 import { loadPublicProjects, loadSiteSettings } from "../../lib/public-api";
+import { staticPageMetadata } from "../../lib/seo";
 import styles from "./projects.module.css";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = staticPageMetadata({
   title: "طرح‌های نیکوکاری | مرکز نیکوکاری آینه",
-  description: "طرح‌های فعال مرکز نیکوکاری آینه و مسیرهای همراهی با هر طرح.",
-};
+  description:
+    "طرح‌های فعال مرکز نیکوکاری آینه و مسیرهای همراهی با هر طرح.",
+  path: "/projects",
+});
 
 export default async function ProjectsPage() {
   const [projects, settings] = await Promise.all([
@@ -20,7 +24,7 @@ export default async function ProjectsPage() {
 
   return (
     <PublicShell settings={settings} activeNav="projects">
-      <main>
+      <main id="main-content">
         <section className={styles.internalHero}>
           <span className={styles.internalEyebrow}>طرح‌های نیکوکاری</span>
           <h1>یک مسیر را برای همراهی انتخاب کنید</h1>
@@ -55,11 +59,13 @@ export default async function ProjectsPage() {
                   </div>
 
                   {project.imageUrl ? (
-                    <img
+                    <Image
                       className={styles.projectImage}
                       src={project.imageUrl}
-                      alt=""
-                      loading="lazy"
+                      alt={"تصویر طرح " + project.title}
+                      width={380}
+                      height={336}
+                      sizes="(max-width: 820px) calc(100vw - 68px), 190px"
                     />
                   ) : (
                     <span className={styles.projectImageFallback} aria-hidden="true">
