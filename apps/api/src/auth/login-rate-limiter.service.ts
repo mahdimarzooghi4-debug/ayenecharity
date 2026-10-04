@@ -10,14 +10,23 @@ interface AttemptBucket {
 export class LoginRateLimiterService {
   private readonly buckets = new Map<string, AttemptBucket>();
   private readonly windowMs = 15 * 60 * 1000;
+  private operations = 0;
 
   assertAllowed(ipAddress: string | undefined, normalizedEmail: string): void {
     const now = Date.now();
     const ipKey = `ip:${ipAddress ?? "unknown"}`;
     const identityKey = `identity:${this.hash(normalizedEmail)}`;
 
+    this.cleanupPeriodically(now);
+
     if (this.count(ipKey, now) >= 20 || this.count(identityKey, now) >= 5) {
-      throw new HttpException("Too many login attempts. Try again later.", HttpStatus.TOO_MANY_REQUESTS);
+      throw new HttpException(
+        {
+          code: "LOGIN_RATE_LIMITED",
+          message: "Too many login attempts. Try again later.",
+        },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
   }
 
@@ -53,6 +62,29 @@ export class LoginRateLimiterService {
     }
 
     current.count += 1;
+  }
+
+  private cleanupPeriodically(now: number): void {
+    this.operations += 1;
+    if (this.operations % 100 !== 0) return;
+
+    for (const [key, bucket] of this.buckets) {
+      if (bucket.resetAt <= now) {
+        this.buckets.delete(key);
+      }
+    }
+
+    if (this.buckets.size > 10_000) {
+      const overflow = this.buckets.size - 10_000;
+      const oldestKeys = [...this.buckets.entries()]
+        .sort((a, b) => a[1].resetAt - b[1].resetAt)
+        .slice(0, overflow)
+        .map(([key]) => key);
+
+      for (const key of oldestKeys) {
+        this.buckets.delete(key);
+      }
+    }
   }
 
   private hash(value: string): string {
