@@ -22,6 +22,15 @@ test("V1 public setting keys include social and contribution information", () =>
   assert.equal(PUBLIC_SETTING_KEYS.includes("social.bale"), true);
   assert.equal(PUBLIC_SETTING_KEYS.includes("social.telegram"), true);
   assert.equal(PUBLIC_SETTING_KEYS.includes("contribution.cardNumber"), true);
+  assert.equal(
+    PUBLIC_SETTING_KEYS.includes("contribution.accountHolderName"),
+    true,
+  );
+  assert.equal(PUBLIC_HOME_SETTING_KEYS.includes("center.name"), true);
+  assert.equal(
+    PUBLIC_HOME_SETTING_KEYS.includes("center.parentOrganization"),
+    true,
+  );
 });
 
 test("homepage settings exclude contribution card details", () => {

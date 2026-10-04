@@ -12,6 +12,8 @@ import { MediaModule } from "./media/media.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { PublicModule } from "./public/public.module";
 import { RequestsModule } from "./requests/requests.module";
+import { SettingsModule } from "./settings/settings.module";
+import { UsersModule } from "./users/users.module";
 import { TransparencyModule } from "./transparency/transparency.module";
 
 @Module({
@@ -29,7 +31,9 @@ import { TransparencyModule } from "./transparency/transparency.module";
     DashboardModule,
     PublicModule,
     RequestsModule,
+    SettingsModule,
     TransparencyModule,
+    UsersModule,
   ],
   controllers: [HealthController],
 })

@@ -3118,3 +3118,615 @@
     width: min(380px, 100vw);
   }
 }
+
+
+/* Settings and users — Figma 114:6870 / user drawer 114:7059 */
+.settingsHeader {
+  min-height: 66px;
+  margin-bottom: 16px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settingsHeader > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.settingsHeader h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.settingsHeader p {
+  margin: 3px 0 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.settingsCards {
+  width: 100%;
+  min-height: 448px;
+  margin-bottom: 16px;
+  direction: ltr;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 16px;
+}
+
+.centerSettingsCard,
+.compactSettingsCard {
+  direction: rtl;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.centerSettingsCard {
+  min-height: 448px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settingsRightStack {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.compactSettingsCard {
+  min-height: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settingsCardHeader {
+  min-height: 52px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settingsCardHeader > div {
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+
+.settingsCardHeader h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.settingsCardHeader p {
+  margin: 0;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.settingsCardHeader button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #0049bc;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.settingsCardHeader button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.settingsFieldRow {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settingsFieldRowCompact {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.settingsField {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.settingsField span {
+  width: 100%;
+  text-align: right;
+}
+
+.settingsField input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #ffffff;
+  color: #475569;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+  outline: none;
+  text-overflow: ellipsis;
+}
+
+.settingsField input:focus {
+  border-color: #0049bc;
+  box-shadow: 0 0 0 3px rgba(0, 73, 188, .08);
+}
+
+.settingsField input::placeholder {
+  color: #94a3b8;
+}
+
+.contributionSettingsNote {
+  min-height: 38px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f2f7ff;
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contributionSettingsNote p {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  color: #0049bc;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  text-align: right;
+}
+
+.contributionSettingsNote img {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.usersPanel {
+  width: 100%;
+  min-height: 426px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.usersPanelHeader {
+  min-height: 84px;
+  padding: 0 16px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.usersPanelHeader > div {
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+
+.usersPanelHeader h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.usersPanelHeader p {
+  margin: 0;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.usersTable {
+  min-width: 960px;
+}
+
+.usersTable th,
+.usersTable td {
+  height: 54px;
+}
+
+.usersTable th:nth-child(1),
+.usersTable td:nth-child(1) {
+  min-width: 460px;
+}
+
+.usersTable th:nth-child(2),
+.usersTable td:nth-child(2) {
+  width: 270px;
+}
+
+.usersTable th:nth-child(3),
+.usersTable td:nth-child(3) {
+  width: 140px;
+}
+
+.usersTable th:nth-child(4),
+.usersTable td:nth-child(4) {
+  width: 110px;
+}
+
+.usersTable th:nth-child(5),
+.usersTable td:nth-child(5) {
+  width: 124px;
+}
+
+.settingsUserName {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settingsUserActive,
+.settingsUserDisabled {
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.settingsUserActive {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.settingsUserDisabled {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.settingsUserActive img,
+.settingsUserDisabled img {
+  width: 6px;
+  height: 6px;
+}
+
+.settingsUserActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.settingsUserActions button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #0049bc;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.settingsUserActions .dangerText {
+  color: #dc2626;
+}
+
+.settingsUserActions .mutedAction {
+  color: #475569;
+}
+
+.settingsUserActions button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.usersGuide {
+  min-height: 78px;
+  padding: 0 16px;
+  background: #f1f5f9;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  text-align: right;
+}
+
+.initialPasswordNotice {
+  margin: 0 16px 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fffee5;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.initialPasswordNotice > div:first-child {
+  min-width: 0;
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: right;
+}
+
+.initialPasswordNotice strong {
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.initialPasswordNotice span,
+.initialPasswordNotice small {
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.initialPasswordNotice code {
+  width: fit-content;
+  max-width: 100%;
+  overflow: auto;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 5px 8px;
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.initialPasswordNotice > div:last-child {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+}
+
+.initialPasswordNotice button {
+  min-height: 34px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #0049bc;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.settingsUserDrawer {
+  width: min(360px, calc(100vw - 24px));
+  height: 100%;
+  border-right: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(5, 20, 46, 0.1);
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settingsUserDrawerHeader {
+  min-height: 104px;
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settingsUserDrawerHeader > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.settingsUserDrawerHeader h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.settingsUserDrawerHeader p {
+  margin: 4px 0 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.settingsUserDrawerHeader button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.settingsUserDrawerHeader button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.settingsUserDrawerHeader img {
+  width: 18px;
+  height: 18px;
+}
+
+.settingsUserForm {
+  min-height: 0;
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settingsUserForm label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.settingsUserForm input,
+.settingsUserForm select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  outline: none;
+}
+
+.settingsUserForm input:focus,
+.settingsUserForm select:focus {
+  border-color: #0049bc;
+  box-shadow: 0 0 0 3px rgba(0, 73, 188, .08);
+}
+
+.userAccessGuide {
+  min-height: 60px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  text-align: right;
+}
+
+.settingsUserDrawerSpacer {
+  flex: 1 1 auto;
+  min-height: 24px;
+}
+
+.settingsUserSave {
+  width: 100%;
+  min-height: 47px;
+  border: 0;
+  border-radius: 16px;
+  padding: 0 16px;
+  background: #0049bc;
+  color: #ffffff;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.settingsUserSave:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .settingsCards {
+    grid-template-columns: 1fr;
+  }
+
+  .settingsRightStack {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .settingsHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .settingsRightStack,
+  .settingsFieldRow,
+  .settingsFieldRowCompact {
+    grid-template-columns: 1fr;
+  }
+
+  .settingsUserDrawer {
+    width: min(360px, 100vw);
+  }
+
+  .initialPasswordNotice {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

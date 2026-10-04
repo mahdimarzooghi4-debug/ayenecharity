@@ -1,6 +1,8 @@
 import type { Prisma } from "@prisma/client";
 
 export const PUBLIC_HOME_SETTING_KEYS = [
+  "center.name",
+  "center.parentOrganization",
   "center.address",
   "center.phone",
   "center.email",
@@ -11,7 +13,7 @@ export const PUBLIC_HOME_SETTING_KEYS = [
 
 export const PUBLIC_CONTRIBUTION_SETTING_KEYS = [
   "contribution.cardNumber",
-  "contribution.cardHolder",
+  "contribution.accountHolderName",
 ] as const;
 
 export const PUBLIC_SETTING_KEYS = [
