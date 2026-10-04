@@ -2,7 +2,7 @@ const SENSITIVE_KEY_PATTERN =
   /(password|passwd|secret|token|authorization|cookie|session|cardnumber|accountnumber|receiptbody|filebody)/i;
 
 const SECRET_TEXT_PATTERNS: Array<[RegExp, string]> = [
-  [/Bearer\s+[A-Za-z0-9._~+\/-]+=*/gi, "Bearer [REDACTED]"],
+  [/Bearer\s+[A-Za-z0-9._~+/-]+=*/gi, "Bearer [REDACTED]"],
   [/(ayene_admin_session=)[^;\s]+/gi, "$1[REDACTED]"],
   [/([?&](?:token|secret|password|session)=)[^&#\s]+/gi, "$1[REDACTED]"],
   [/([a-z][a-z0-9+.-]*:\/\/[^:\s/@]+:)[^@\s/]+@/gi, "$1[REDACTED]@"],
