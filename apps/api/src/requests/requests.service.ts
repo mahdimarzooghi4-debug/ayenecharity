@@ -67,7 +67,10 @@ export class RequestsService {
     };
   }
 
-  async list(query: AdminRequestListQueryDto) {
+  async list(
+    query: AdminRequestListQueryDto,
+    actor: AuthenticatedAdmin,
+  ) {
     const search = query.search?.trim();
     const createdAt: Prisma.DateTimeFilter | undefined =
       query.from || query.to
@@ -143,6 +146,14 @@ export class RequestsService {
       totalPages: Math.max(1, Math.ceil(total / query.pageSize)),
       requestTypes: requestTypes.map((item) => item.requestType),
       newCount,
+      capabilities: {
+        updateStatus: hasPermissions(actor.role, [
+          Permission.REQUESTS_UPDATE_STATUS,
+        ]),
+        addInternalNote: hasPermissions(actor.role, [
+          Permission.REQUESTS_ADD_INTERNAL_NOTE,
+        ]),
+      },
     };
   }
 
