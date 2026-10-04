@@ -7,6 +7,7 @@
 - `GET /api/public/settings`: broader allowlisted public settings contract, including contribution card information for contribution-specific flows.
 - `GET /api/public/projects`: public project listing.
 - `GET /api/public/projects/:slug`: public project detail and related published reports.
+- `GET /api/public/transparency`: published center-wide/project-linked transparency documents grouped by category.
 
 None of these endpoints requires an admin session.
 
@@ -72,3 +73,10 @@ The homepage returns published-document counts for:
 - financial documents
 
 When a category has no published records, the UI may show a neutral “در دست تکمیل” state instead of fabricated document data.
+
+
+## Public transparency page
+
+The transparency page reads only from `GET /api/public/transparency`. Draft records are never rendered. Each category displays actual published records when available and a neutral empty state otherwise.
+
+Published document files are linked only when their media asset is public and has `TRANSPARENCY_DOCUMENT` purpose. No placeholder license numbers, financial amounts, dates or document titles are generated.
