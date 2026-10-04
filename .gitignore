@@ -1,6 +1,7 @@
 node_modules/
 .next/
 dist/
+.e2e-dist/
 coverage/
 .turbo/
 *.log
