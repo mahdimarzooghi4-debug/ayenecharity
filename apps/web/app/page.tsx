@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { HeroSlider } from "./components/hero-slider";
@@ -7,8 +9,16 @@ import {
   loadPublicHome,
   type PublicTransparencyPreview,
 } from "../lib/public-api";
+import { staticPageMetadata } from "../lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
+
+export const metadata: Metadata = staticPageMetadata({
+  title: "مرکز نیکوکاری آینه",
+  description:
+    "طرح‌های فعال نیکوکاری، خدمات مرکز و گزارش‌های شفافیت آینه.",
+  path: "/",
+});
 
 const faNumber = new Intl.NumberFormat("fa-IR");
 
@@ -61,7 +71,7 @@ export default async function HomePage() {
 
   return (
     <PublicShell settings={data.settings}>
-      <main>
+      <main id="main-content">
         <section className={styles.hero} aria-labelledby="home-title">
           <HeroSlider slides={data.heroSlides} />
 
@@ -162,11 +172,13 @@ export default async function HomePage() {
                   </div>
 
                   {project.imageUrl ? (
-                    <img
+                    <Image
                       className={styles.projectMedia}
                       src={project.imageUrl}
-                      alt=""
-                      loading="lazy"
+                      alt={"تصویر طرح " + project.title}
+                      width={336}
+                      height={280}
+                      sizes="(max-width: 430px) 105px, (max-width: 820px) 126px, 168px"
                     />
                   ) : (
                     <span className={styles.projectMediaFallback} aria-hidden="true">
