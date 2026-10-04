@@ -69,6 +69,9 @@ export function PublicShell({
 
   return (
     <div className={styles.page}>
+      <a className="skip-link" href="#main-content">
+        رفتن به محتوای اصلی
+      </a>
       <header className={styles.siteHeader}>
         <div className={styles.headerTop}>
           <Link className={styles.brand} href="/" aria-label="مرکز نیکوکاری آینه">
