@@ -90,12 +90,6 @@ const faDateTime = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
   timeStyle: "short",
 });
 
-const typeLabels: Record<DocumentType, string> = {
-  PERFORMANCE_REPORT: "گزارش عملکرد",
-  LICENSE: "مجوزها",
-  FINANCIAL_DOCUMENT: "اسناد مالی",
-};
-
 const typeTabs: Array<{ value: DocumentType; label: string }> = [
   { value: "PERFORMANCE_REPORT", label: "گزارش عملکرد" },
   { value: "LICENSE", label: "مجوزها" },
