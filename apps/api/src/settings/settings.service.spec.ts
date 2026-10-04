@@ -93,6 +93,14 @@ test("contribution settings normalize card digits and audit one canonical source
   assert.equal(result.contribution.cardNumber, "6037997512345678");
   assert.equal(auditData?.action, "SETTINGS_UPDATED");
   assert.equal(auditData?.entityId, "contribution");
+  assert.equal(
+    JSON.stringify(auditData).includes("6037997512345678"),
+    false,
+  );
+  assert.equal(
+    JSON.stringify(auditData).includes("[REDACTED]"),
+    true,
+  );
 });
 
 test("placeholder social URLs are rejected", async () => {
