@@ -7,7 +7,7 @@
     "start": "node dist/main.js",
     "lint": "eslint src",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "tsx --test src/auth/*.spec.ts src/media/*.spec.ts src/projects/*.spec.ts src/public/*.spec.ts",
+    "test": "tsx --test src/auth/*.spec.ts src/contributions/*.spec.ts src/media/*.spec.ts src/projects/*.spec.ts src/public/*.spec.ts",
     "db:generate": "prisma generate",
     "db:validate": "prisma validate",
     "db:migrate": "prisma migrate dev",
