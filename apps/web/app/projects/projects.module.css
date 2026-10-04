@@ -531,7 +531,11 @@
 a.reportCard:hover,
 a.reportCard:focus-visible {
   border-color: #0049bc;
-  outline: none;
+}
+
+a.reportCard:focus-visible {
+  outline: 3px solid #0049bc;
+  outline-offset: 3px;
 }
 
 .reportBadge {
@@ -1024,4 +1028,16 @@ a.reportCard:focus-visible {
     width: 100%;
     flex: 0 0 auto;
   }
+}
+
+
+.projectAction:focus-visible,
+.projectsCtaLink:focus-visible,
+.detailPrimaryAction:focus-visible,
+.participationButton:focus-visible,
+.contributionPrimary:focus-visible,
+.contributionSecondary:focus-visible,
+.contributionClose:focus-visible {
+  outline: 3px solid #0049bc;
+  outline-offset: 3px;
 }
