@@ -73,23 +73,23 @@ export default function AdminDashboardPage() {
         <Metric
           label="درخواست‌های همکاری"
           value={data?.metrics.cooperationRequests}
-          icon="/brand/users.svg"
+          icon="/brand/metric-users-round.svg"
         />
         <Metric
           label="رسیدهای در انتظار بررسی"
           value={data?.metrics.pendingReceipts}
-          icon="/brand/file-check.svg"
+          icon="/brand/metric-receipt-text.svg"
           accent
         />
         <Metric
           label="مشارکت‌های ثبت‌شده"
           value={data?.metrics.contributions}
-          icon="/brand/wallet.svg"
+          icon="/brand/admin-hand-heart.svg"
         />
         <Metric
           label="طرح‌های فعال"
           value={data?.metrics.activeProjects}
-          icon="/brand/activity.svg"
+          icon="/brand/metric-folder-check.svg"
         />
       </section>
 
@@ -202,10 +202,10 @@ function Metric({
         </span>
       </div>
       <div className={styles.metricValue}>
+        <strong>{value == null ? "—" : faNumber.format(value)}</strong>
         <small className={styles.metricHint}>
           {value == null ? "در حال دریافت" : value === 0 ? "موردی ثبت نشده" : "به‌روز"}
         </small>
-        <strong>{value == null ? "—" : faNumber.format(value)}</strong>
       </div>
     </article>
   );
