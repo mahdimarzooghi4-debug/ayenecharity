@@ -10,6 +10,7 @@ import styles from "../admin.module.css";
 
 interface AdminUser {
   id: string;
+  username: string;
   email: string;
   fullName: string;
   role: "SUPER_ADMIN" | "FINANCE" | "PROJECT_MANAGER" | "CONTENT_MANAGER";
@@ -31,40 +32,47 @@ const roleLabels: Record<AdminUser["role"], string> = {
 interface NavItem {
   href: string;
   label: string;
+  icon: string;
   future?: boolean;
   roles?: readonly AdminUser["role"][];
 }
 
 const navItems: readonly NavItem[] = [
-  { href: "/admin", label: "داشبورد" },
+  { href: "/admin", label: "داشبورد", icon: "/brand/activity.svg" },
   {
     href: "/admin/projects",
     label: "طرح‌ها",
+    icon: "/brand/workflow.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/contributions",
     label: "مشارکت‌ها",
+    icon: "/brand/wallet.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER"],
   },
   {
     href: "/admin/transparency",
     label: "گزارش و شفافیت",
+    icon: "/brand/file-check.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/requests",
     label: "درخواست‌ها",
+    icon: "/brand/users.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/content",
     label: "محتوای سایت",
+    icon: "/brand/file-text.svg",
     roles: ["SUPER_ADMIN", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/settings",
     label: "تنظیمات",
+    icon: "/brand/shield.svg",
     roles: ["SUPER_ADMIN"],
   },
 ];
@@ -115,7 +123,7 @@ export function AdminShell({ title, subtitle, children }: Props) {
             <span className={styles.avatar}>{user.fullName.slice(0, 1)}</span>
             <span className={styles.userMeta}>
               <strong>{user.fullName}</strong>
-              <small>{roleLabels[user.role]} · خروج</small>
+              <small>{roleLabels[user.role]} · @{user.username} · خروج</small>
             </span>
           </button>
           <div className={styles.topbarTitle}>
@@ -130,9 +138,11 @@ export function AdminShell({ title, subtitle, children }: Props) {
         <div className={styles.brand}>
           <div className={styles.brandText}>
             <strong>مرکز نیکوکاری آینه</strong>
-            <span>پنل مدیریت · V1</span>
+            <span>پنل مدیریت</span>
           </div>
-          <div className={styles.brandMark}>آ</div>
+          <div className={styles.brandMark}>
+            <img src="/brand/logo.png" alt="" width={28} height={28} />
+          </div>
         </div>
         <div className={styles.divider} />
         <nav className={styles.nav}>
@@ -148,7 +158,7 @@ export function AdminShell({ title, subtitle, children }: Props) {
               return (
                 <span className={styles.navItemDisabled} key={item.href} aria-disabled="true">
                   <span>{item.label}</span>
-                  <i />
+                  <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
                 </span>
               );
             }
@@ -160,15 +170,15 @@ export function AdminShell({ title, subtitle, children }: Props) {
                 key={item.href}
               >
                 <span>{item.label}</span>
-                <i />
+                <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
                 {active ? <b /> : null}
               </Link>
             );
           })}
         </nav>
         <div className={styles.systemStatus}>
-          <span><i /> بررسی دستی پرداخت‌ها</span>
-          <small>نسخه ۰.۱</small>
+          <span><i /> سامانه عملیاتی است</span>
+          <small>پرداخت‌ها با بررسی انسانی تأیید می‌شوند</small>
         </div>
       </aside>
     </div>
