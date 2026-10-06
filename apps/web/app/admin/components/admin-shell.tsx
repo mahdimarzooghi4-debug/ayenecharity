@@ -136,12 +136,12 @@ export function AdminShell({ title, subtitle, children }: Props) {
 
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
+          <div className={styles.brandMark}>
+            <img src="/brand/logo.png" alt="" width={28} height={28} />
+          </div>
           <div className={styles.brandText}>
             <strong>مرکز نیکوکاری آینه</strong>
             <span>پنل مدیریت</span>
-          </div>
-          <div className={styles.brandMark}>
-            <img src="/brand/logo.png" alt="" width={28} height={28} />
           </div>
         </div>
         <div className={styles.divider} />
@@ -157,8 +157,8 @@ export function AdminShell({ title, subtitle, children }: Props) {
             if (unavailable) {
               return (
                 <span className={styles.navItemDisabled} key={item.href} aria-disabled="true">
-                  <span>{item.label}</span>
                   <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
+                  <span>{item.label}</span>
                 </span>
               );
             }
@@ -169,8 +169,8 @@ export function AdminShell({ title, subtitle, children }: Props) {
                 href={item.href}
                 key={item.href}
               >
-                <span>{item.label}</span>
                 <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
+                <span>{item.label}</span>
                 {active ? <b /> : null}
               </Link>
             );
