@@ -4209,3 +4209,46 @@
   font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
 }
 
+
+
+/* Sidebar true RTL item order */
+.brand {
+  direction: rtl;
+  justify-content: flex-start;
+}
+
+.nav {
+  direction: rtl;
+}
+
+.navItem,
+.navItemActive,
+.navItemDisabled {
+  direction: rtl;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: right;
+}
+
+.navItem span,
+.navItemActive span,
+.navItemDisabled span {
+  text-align: right;
+}
+
+.navIcon {
+  order: 0;
+}
+
+.navItem span,
+.navItemActive span,
+.navItemDisabled span {
+  order: 1;
+}
+
+.systemStatus,
+.systemStatus span,
+.systemStatus small {
+  direction: rtl;
+  text-align: right;
+}
