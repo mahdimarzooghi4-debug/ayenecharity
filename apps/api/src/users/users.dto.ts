@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  Matches,
   MaxLength,
   MinLength,
 } from "class-validator";
@@ -17,6 +18,15 @@ function trim(value: unknown): unknown {
 }
 
 export class CreateAdminUserDto {
+  @Transform(({ value }) =>
+    typeof value === "string" ? value.trim().toLowerCase() : value,
+  )
+  @IsString()
+  @MinLength(3)
+  @MaxLength(64)
+  @Matches(/^[a-z0-9._-]+$/)
+  username!: string;
+
   @Transform(({ value }) => trim(value))
   @IsString()
   @MinLength(2)
@@ -43,6 +53,16 @@ export class CreateAdminUserDto {
 }
 
 export class UpdateAdminUserDto {
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === "string" ? value.trim().toLowerCase() : value,
+  )
+  @IsString()
+  @MinLength(3)
+  @MaxLength(64)
+  @Matches(/^[a-z0-9._-]+$/)
+  username?: string;
+
   @IsOptional()
   @Transform(({ value }) => trim(value))
   @IsString()
