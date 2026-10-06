@@ -1,0 +1,162 @@
+name: ayenecharity-staging
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - stage_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    mem_limit: 512m
+    networks:
+      - backend
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - stage_minio_data:/data
+    ports:
+      - "127.0.0.1:9200:9000"
+      - "127.0.0.1:9201:9001"
+    mem_limit: 384m
+    networks:
+      - backend
+
+  minio-init:
+    image: minio/mc:latest
+    restart: "no"
+    depends_on:
+      - minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      S3_BUCKET: ${S3_BUCKET}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        until mc alias set stage http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"; do
+          sleep 2
+        done
+        mc mb --ignore-existing "stage/$$S3_BUCKET"
+        cat >/tmp/public-policy.json <<EOF
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"AWS": ["*"]},
+              "Action": ["s3:GetObject"],
+              "Resource": [
+                "arn:aws:s3:::$$S3_BUCKET/project-image/*",
+                "arn:aws:s3:::$$S3_BUCKET/hero-image/*"
+              ]
+            }
+          ]
+        }
+        EOF
+        mc anonymous set-json /tmp/public-policy.json "stage/$$S3_BUCKET"
+    networks:
+      - backend
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      SESSION_SECRET: ${SESSION_SECRET}
+      SESSION_TTL_HOURS: "12"
+      WEB_ORIGIN: https://stage.ayenecharity.ir
+      TRUST_PROXY_HOPS: "1"
+      S3_ENDPOINT: https://api-stage.ayenecharity.ir
+      S3_REGION: us-east-1
+      S3_BUCKET: ${S3_BUCKET}
+      S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      S3_FORCE_PATH_STYLE: "true"
+      PUBLIC_MEDIA_BASE_URL: https://api-stage.ayenecharity.ir/${S3_BUCKET}
+      MEDIA_SIGNED_URL_TTL_SECONDS: "300"
+    extra_hosts:
+      - "api-stage.ayenecharity.ir:host-gateway"
+    ports:
+      - "127.0.0.1:3201:3001"
+    mem_limit: 512m
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3001/api/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - backend
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: https://api-stage.ayenecharity.ir
+        NEXT_PUBLIC_SITE_URL: https://stage.ayenecharity.ir
+        NEXT_PUBLIC_MEDIA_BASE_URL: https://api-stage.ayenecharity.ir/${S3_BUCKET}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      API_BASE_URL: http://api:3001
+      NEXT_PUBLIC_API_BASE_URL: https://api-stage.ayenecharity.ir
+      SITE_URL: https://stage.ayenecharity.ir
+      NEXT_PUBLIC_SITE_URL: https://stage.ayenecharity.ir
+      NEXT_PUBLIC_MEDIA_BASE_URL: https://api-stage.ayenecharity.ir/${S3_BUCKET}
+    ports:
+      - "127.0.0.1:3200:3000"
+    mem_limit: 512m
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - backend
+
+volumes:
+  stage_postgres_data:
+  stage_minio_data:
+
+networks:
+  backend:
+    driver: bridge
