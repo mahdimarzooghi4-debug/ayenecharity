@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pnpm install --no-frozen-lockfile \
+RUN pnpm install --frozen-lockfile \
   && pnpm db:generate \
   && pnpm --filter @ayene/api build \
   && chown -R node:node /app
