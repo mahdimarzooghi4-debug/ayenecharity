@@ -4121,3 +4121,97 @@
     height: 64px;
   }
 }
+
+
+/* RTL correctness + Persian typography */
+.adminApp {
+  direction: rtl;
+}
+
+.sidebar {
+  order: -1;
+  direction: rtl;
+}
+
+.mainArea,
+.content {
+  direction: rtl;
+  text-align: right;
+}
+
+.topbar {
+  direction: ltr;
+}
+
+.topbar > * {
+  direction: rtl;
+}
+
+.pageHeader {
+  direction: ltr;
+}
+
+.pageHeader > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.toolbar {
+  direction: rtl;
+}
+
+.filterTabs,
+.searchForm,
+.rowActions,
+.pagination {
+  direction: rtl;
+}
+
+.searchForm input,
+.drawerForm input,
+.drawerForm textarea,
+.loginCard input {
+  direction: rtl;
+  text-align: right;
+}
+
+.searchForm input[dir="ltr"],
+.drawerForm input[dir="ltr"],
+.loginCard input[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+.table,
+.table th,
+.table td {
+  direction: rtl;
+  text-align: right;
+}
+
+.projectName {
+  align-items: flex-start;
+  text-align: right;
+}
+
+.projectName small[dir="ltr"] {
+  direction: ltr;
+  text-align: right;
+  width: 100%;
+}
+
+.pageHeader h1,
+.panelHeader h2,
+.metricCard strong,
+.brandText strong,
+.topbarTitle strong,
+.userMeta strong {
+  font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+}
