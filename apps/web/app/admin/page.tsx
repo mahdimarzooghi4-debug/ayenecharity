@@ -68,10 +68,27 @@ export default function AdminDashboardPage() {
       {error ? <div className={styles.errorBox}>{error}</div> : null}
 
       <section className={styles.metricsGrid}>
-        <Metric label="درخواست‌های همکاری" value={data?.metrics.cooperationRequests} />
-        <Metric label="رسیدهای در انتظار بررسی" value={data?.metrics.pendingReceipts} accent />
-        <Metric label="مشارکت‌های ثبت‌شده" value={data?.metrics.contributions} />
-        <Metric label="طرح‌های فعال" value={data?.metrics.activeProjects} />
+        <Metric
+          label="درخواست‌های همکاری"
+          value={data?.metrics.cooperationRequests}
+          icon="/brand/users.svg"
+        />
+        <Metric
+          label="رسیدهای در انتظار بررسی"
+          value={data?.metrics.pendingReceipts}
+          icon="/brand/file-check.svg"
+          accent
+        />
+        <Metric
+          label="مشارکت‌های ثبت‌شده"
+          value={data?.metrics.contributions}
+          icon="/brand/wallet.svg"
+        />
+        <Metric
+          label="طرح‌های فعال"
+          value={data?.metrics.activeProjects}
+          icon="/brand/activity.svg"
+        />
       </section>
 
       <section className={styles.dashboardGrid}>
@@ -124,7 +141,17 @@ export default function AdminDashboardPage() {
                   </tr>
                 ))}
                 {data && data.latestContributions.length === 0 ? (
-                  <tr><td colSpan={5} className={styles.emptyCell}>هنوز مشارکتی ثبت نشده است.</td></tr>
+                  <tr>
+                    <td colSpan={5} className={styles.emptyCell}>
+                      <span className={styles.emptyTableState}>
+                        <span className={styles.emptyIcon}>
+                          <img src="/brand/wallet.svg" alt="" width={22} height={22} />
+                        </span>
+                        <strong>هنوز مشارکتی ثبت نشده است.</strong>
+                        <small>اولین مشارکت پس از ثبت در این جدول نمایش داده می‌شود.</small>
+                      </span>
+                    </td>
+                  </tr>
                 ) : null}
               </tbody>
             </table>
@@ -138,19 +165,26 @@ export default function AdminDashboardPage() {
 function Metric({
   label,
   value,
+  icon,
   accent = false,
 }: {
   label: string;
   value: number | null | undefined;
+  icon: string;
   accent?: boolean;
 }) {
   return (
     <article className={styles.metricCard}>
       <div className={styles.metricTitle}>
-        <span className={accent ? styles.metricIconAccent : styles.metricIcon}>•</span>
         <span>{label}</span>
+        <span className={accent ? styles.metricIconAccent : styles.metricIcon}>
+          <img src={icon} alt="" width={18} height={18} />
+        </span>
       </div>
       <strong>{value == null ? "—" : faNumber.format(value)}</strong>
+      <small className={styles.metricHint}>
+        {value == null ? "در حال دریافت داده…" : value === 0 ? "موردی ثبت نشده" : "به‌روز"}
+      </small>
     </article>
   );
 }
@@ -187,7 +221,15 @@ function CompactList({
   empty: string;
 }) {
   if (rows.length === 0) {
-    return <div className={styles.emptyState}>{empty}</div>;
+    return (
+      <div className={styles.emptyState}>
+        <span className={styles.emptyIcon}>
+          <img src="/brand/clipboard.svg" alt="" width={22} height={22} />
+        </span>
+        <strong>{empty}</strong>
+        <small>با ثبت داده جدید، این بخش به‌صورت خودکار به‌روزرسانی می‌شود.</small>
+      </div>
+    );
   }
 
   return (
