@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { adminApi } from "../../lib/admin-api";
@@ -57,6 +58,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminShell title="داشبورد" subtitle="نمای کلی عملیات روزانه">
+      <div className={styles.dashboardPage}>
       <div className={styles.pageHeader}>
         <span className={styles.noteBadge}>داده‌های واقعی سامانه</span>
         <div>
@@ -93,7 +95,11 @@ export default function AdminDashboardPage() {
 
       <section className={styles.dashboardGrid}>
         <div className={styles.stack}>
-          <Panel title="رسیدهای نیازمند بررسی" subtitle="اولویت بررسی دستی">
+          <Panel
+            title="رسیدهای نیازمند بررسی"
+            subtitle="اولویت بررسی دستی"
+            badge={data ? `${faNumber.format(data.reviewQueue.length)} مورد` : "در حال دریافت"}
+          >
             <CompactList
               empty="رسیدی در انتظار بررسی نیست."
               rows={(data?.reviewQueue ?? []).map((item) => ({
@@ -105,7 +111,11 @@ export default function AdminDashboardPage() {
             />
           </Panel>
 
-          <Panel title="آخرین درخواست‌ها" subtitle="درخواست‌های همکاری">
+          <Panel
+            title="آخرین درخواست‌ها"
+            subtitle="درخواست‌های همکاری سایت"
+            badge={data ? `${faNumber.format(data.recentRequests.length)} مورد` : "در حال دریافت"}
+          >
             <CompactList
               empty="درخواستی ثبت نشده است."
               rows={(data?.recentRequests ?? []).map((item) => ({
@@ -118,7 +128,12 @@ export default function AdminDashboardPage() {
           </Panel>
         </div>
 
-        <Panel title="آخرین مشارکت‌ها" subtitle="تازه‌ترین موارد ثبت‌شده" large>
+        <Panel
+          title="آخرین مشارکت‌ها"
+          subtitle="آخرین موارد ثبت‌شده در سامانه"
+          badge={data ? `${faNumber.format(data.latestContributions.length)} مورد` : "در حال دریافت"}
+          large
+        >
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
@@ -126,8 +141,8 @@ export default function AdminDashboardPage() {
                   <th>نام</th>
                   <th>طرح</th>
                   <th>مبلغ اعلامی</th>
-                  <th>وضعیت</th>
                   <th>تاریخ</th>
+                  <th>وضعیت</th>
                 </tr>
               </thead>
               <tbody>
@@ -136,8 +151,8 @@ export default function AdminDashboardPage() {
                     <td>{item.contributorName}</td>
                     <td>{item.project.title}</td>
                     <td>{amount(item.declaredAmountRial)}</td>
-                    <td><StatusBadge status={item.status} /></td>
                     <td>{faDate.format(new Date(item.createdAt))}</td>
+                    <td><StatusBadge status={item.status} /></td>
                   </tr>
                 ))}
                 {data && data.latestContributions.length === 0 ? (
@@ -156,8 +171,13 @@ export default function AdminDashboardPage() {
               </tbody>
             </table>
           </div>
+          <div className={styles.dashboardTableFooter}>
+            <Link href="/admin/contributions">مشاهده مشارکت‌ها</Link>
+            <span>داده‌های واقعی سامانه</span>
+          </div>
         </Panel>
       </section>
+      </div>
     </AdminShell>
   );
 }
@@ -181,10 +201,12 @@ function Metric({
           <img src={icon} alt="" width={18} height={18} />
         </span>
       </div>
-      <strong>{value == null ? "—" : faNumber.format(value)}</strong>
-      <small className={styles.metricHint}>
-        {value == null ? "در حال دریافت داده…" : value === 0 ? "موردی ثبت نشده" : "به‌روز"}
-      </small>
+      <div className={styles.metricValue}>
+        <small className={styles.metricHint}>
+          {value == null ? "در حال دریافت" : value === 0 ? "موردی ثبت نشده" : "به‌روز"}
+        </small>
+        <strong>{value == null ? "—" : faNumber.format(value)}</strong>
+      </div>
     </article>
   );
 }
@@ -193,16 +215,19 @@ function Panel({
   title,
   subtitle,
   children,
+  badge,
   large = false,
 }: {
   title: string;
   subtitle: string;
+  badge?: string;
   children: React.ReactNode;
   large?: boolean;
 }) {
   return (
     <section className={large ? styles.panelLarge : styles.panel}>
       <div className={styles.panelHeader}>
+        {badge ? <span className={styles.panelBadge}>{badge}</span> : null}
         <div>
           <h2>{title}</h2>
           <p>{subtitle}</p>
