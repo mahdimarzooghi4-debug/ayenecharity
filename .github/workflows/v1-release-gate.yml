@@ -9,58 +9,36 @@ permissions:
 jobs:
   staging-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     environment: staging
     env:
-      DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      STAGING_API_URL: ${{ secrets.STAGING_API_URL }}
-      STAGING_WEB_URL: ${{ secrets.STAGING_WEB_URL }}
+      STAGING_API_URL: https://api-stage.ayenecharity.ir
+      STAGING_WEB_URL: https://stage.ayenecharity.ir
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate staging secrets
+      - name: Validate staging public endpoints
         run: |
-          test -n "$DATABASE_URL"
           test -n "$STAGING_API_URL"
           test -n "$STAGING_WEB_URL"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.17.1
-          run_install: false
+          case "$STAGING_API_URL" in https://*) ;; *) exit 1 ;; esac
+          case "$STAGING_WEB_URL" in https://*) ;; *) exit 1 ;; esac
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Validate and generate Prisma
-        run: |
-          pnpm db:validate
-          pnpm db:generate
-
-      - name: Verify pre-migration backup and restore
-        run: pnpm qa:backup-restore
-
-      - name: Apply staging migrations
-        run: pnpm db:migrate:deploy
-
-      - name: Verify migration status
-        run: pnpm --filter @ayene/api exec prisma migrate status
-
       - name: Run staging smoke checks
-        run: pnpm qa:smoke
+        run: node scripts/smoke-stage.mjs
 
       - name: Release gate summary
         run: |
-          echo "V1 staging gate passed." >> "$GITHUB_STEP_SUMMARY"
-          echo "- Backup/restore: passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Migrations: passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- API readiness: passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Public/admin smoke: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "V1 staging public gate passed." >> "$GITHUB_STEP_SUMMARY"
+          echo "- API liveness/readiness: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Database/object-storage readiness through API: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public/admin HTTP smoke: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Database backup/restore and migration status are intentionally host-local prerequisites because staging PostgreSQL is not exposed to GitHub-hosted runners." >> "$GITHUB_STEP_SUMMARY"

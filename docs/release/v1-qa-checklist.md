@@ -5,7 +5,8 @@ Status values: `PASS`, `FAIL`, `N/A`.
 ## Automated gates
 
 - [ ] Main CI is green: schema validation, migration deploy, lint, typecheck, unit tests, V1 HTTP E2E, backup/restore verification, build.
-- [ ] V1 Release Gate workflow is green against staging.
+- [ ] Staging host-local database gate passes without exposing PostgreSQL publicly.
+- [ ] V1 Release Gate workflow is green against the public staging origins.
 - [ ] No open P0 or P1 release bug exists.
 
 ## Public site
@@ -56,8 +57,8 @@ Status values: `PASS`, `FAIL`, `N/A`.
 - [ ] `/api/health/ready` reports database and object storage healthy.
 - [ ] Structured logs appear without passwords, session tokens, card data or file bodies.
 - [ ] Failed 5xx responses do not expose production stack traces.
-- [ ] Staging backup/restore verification passes.
-- [ ] Migration status is clean after deployment.
+- [ ] Staging backup/restore verification passes on the staging host.
+- [ ] Migration status is clean after deployment on the staging host.
 - [ ] Rollback procedure has been reviewed by the release owner.
 
 ## Release decision

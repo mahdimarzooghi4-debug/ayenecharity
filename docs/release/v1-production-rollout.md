@@ -6,9 +6,12 @@ Production deployment is allowed only when:
 
 1. the commit is on `main`;
 2. CI is green;
-3. the staging V1 Release Gate is green;
-4. the manual QA checklist has no P0/P1 failure;
-5. the release approval record is marked `GO`.
+3. the staging host-local database gate has passed: backup/restore verified, migrations applied and migration status clean;
+4. the GitHub **V1 Release Gate** is green against the public staging origins;
+5. the manual QA checklist has no P0/P1 failure;
+6. the release approval record is marked `GO`.
+
+Staging PostgreSQL must remain private. Never expose it or create a public database URL solely to satisfy CI.
 
 ## Production deployment
 

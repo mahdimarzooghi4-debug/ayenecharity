@@ -16,6 +16,8 @@ Use isolated staging resources:
 
 Staging must not reuse the production database, production bucket, production session secret, or production admin password.
 
+The staging PostgreSQL service is intentionally private. Do not expose it to the Internet and do not create a public database URL only for CI.
+
 ## Required environment variables
 
 ### API
@@ -78,40 +80,42 @@ Web start:
 pnpm --filter @ayene/web start
 ```
 
-## Migration procedure
+## Release-gate split
+
+The release gate has two intentionally separate parts.
+
+### 1. Host-local database gate
+
+Run this on the staging host, where PostgreSQL is reachable only through the private Docker network:
 
 1. Confirm the staging API is not receiving release-test writes.
-2. Run the backup/restore verifier against the current staging database:
+2. Run the backup/restore verifier against the current staging database.
+3. Apply migrations from the exact approved commit.
+4. Verify Prisma migration status is clean.
+5. Confirm `/api/health/ready` reports both database and object storage healthy.
 
-```bash
-DATABASE_URL="<staging database url>" pnpm qa:backup-restore
-```
+The database must remain private during these checks.
 
-3. Apply migrations:
+### 2. GitHub public staging gate
 
-```bash
-DATABASE_URL="<staging database url>" pnpm db:migrate:deploy
-```
+After the host-local database gate has passed, run the GitHub Actions workflow **V1 Release Gate** on the exact approved `main` commit.
 
-4. Verify migration history:
+The workflow intentionally uses only the public HTTPS staging origins:
 
-```bash
-DATABASE_URL="<staging database url>" pnpm --filter @ayene/api exec prisma migrate status
-```
+- `https://stage.ayenecharity.ir`
+- `https://api-stage.ayenecharity.ir`
 
-5. Deploy API and Web from the exact commit that passed CI.
-6. Run staging smoke tests:
+It verifies API liveness/readiness, database and object-storage readiness as exposed by the API health contract, public routes, unauthenticated admin protection, security headers and admin noindex behavior.
 
-```bash
-STAGING_API_URL="https://<api>" \
-STAGING_WEB_URL="https://<web>" \
-pnpm qa:smoke
-```
+The workflow does **not** receive `DATABASE_URL` and must never require `STAGING_DATABASE_URL`.
 
-7. Execute the manual QA checklist in `docs/release/v1-qa-checklist.md`.
-8. Record the result in `docs/release/v1-release-approval.md`.
+## Migration procedure
 
-The GitHub Actions workflow **V1 Release Gate** performs steps 2–4 and 6 when the `staging` environment secrets are configured.
+1. Complete the host-local database gate above.
+2. Deploy API and Web from the exact commit that passed CI.
+3. Run the GitHub **V1 Release Gate**.
+4. Execute the manual QA checklist in `docs/release/v1-qa-checklist.md`.
+5. Record the result in `docs/release/v1-release-approval.md`.
 
 ## Data-loss rule
 
