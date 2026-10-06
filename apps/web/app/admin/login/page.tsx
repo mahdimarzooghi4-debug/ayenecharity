@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
       await adminApi("/admin/auth/login", {
         method: "POST",
         body: JSON.stringify({
-          email: String(form.get("email") ?? ""),
+          username: String(form.get("username") ?? ""),
           password: String(form.get("password") ?? ""),
         }),
       });
@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
         err instanceof AdminApiError
           ? err.status === 429
             ? "تعداد تلاش‌های ورود زیاد بوده است. کمی بعد دوباره تلاش کنید."
-            : "ایمیل یا رمز عبور صحیح نیست."
+            : "نام کاربری یا رمز عبور صحیح نیست."
           : "ارتباط با سرور برقرار نشد.",
       );
     } finally {
@@ -52,8 +52,17 @@ export default function AdminLoginPage() {
           </div>
         </div>
         <label>
-          ایمیل
-          <input dir="ltr" name="email" type="email" autoComplete="username" required />
+          نام کاربری
+          <input
+            dir="ltr"
+            name="username"
+            type="text"
+            autoComplete="username"
+            minLength={3}
+            maxLength={64}
+            pattern="[A-Za-z0-9._-]+"
+            required
+          />
         </label>
         <label>
           رمز عبور
