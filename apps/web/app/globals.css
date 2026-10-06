@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css");
+
 :root {
   color-scheme: light;
   font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
@@ -10,6 +12,9 @@
 }
 
 html {
+  direction: rtl;
+  text-align: right;
+  scrollbar-gutter: stable;
   min-height: 100%;
   scroll-behavior: smooth;
   background: #ffffff;
@@ -20,6 +25,9 @@ body {
   min-height: 100vh;
   background: #ffffff;
   color: #0f172a;
+  direction: rtl;
+  text-align: right;
+  font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
 }
 
 button,
@@ -27,6 +35,18 @@ input,
 textarea,
 select {
   font: inherit;
+  direction: rtl;
+  text-align: right;
+}
+
+:where(main, section, article, aside, nav, header, footer, form, dialog) {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 a {

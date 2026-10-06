@@ -4,9 +4,12 @@
   background: #ffffff;
   color: #0f172a;
   direction: rtl;
+  text-align: right;
 }
 
 .siteHeader {
+  direction: rtl;
+  text-align: right;
   min-height: 72px;
   padding-inline: var(--page-pad);
   border-bottom: 1px solid #e2e8f0;
@@ -46,6 +49,8 @@
 
 .nav {
   order: 2;
+  direction: rtl;
+  text-align: right;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -138,10 +143,10 @@
 
 .hero {
   min-height: 472px;
-  direction: ltr;
+  direction: rtl;
   padding: 48px var(--page-pad);
   display: grid;
-  grid-template-columns: 560px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 560px;
   align-items: center;
   gap: 24px;
   background: #ffffff;
@@ -149,10 +154,12 @@
 
 .heroCopy {
   min-width: 0;
+  grid-column: 1;
+  grid-row: 1;
   direction: rtl;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 24px;
 }
 
@@ -203,13 +210,19 @@
 }
 
 .heroActions {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
 }
 
 .heroVisual {
+  grid-column: 2;
+  grid-row: 1;
   width: 560px;
   height: 376px;
   position: relative;
@@ -338,6 +351,8 @@
 }
 
 .section {
+  direction: rtl;
+  text-align: right;
   padding: 64px var(--page-pad);
 }
 
@@ -358,7 +373,7 @@
 .sectionHeader {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -383,6 +398,8 @@
 }
 
 .serviceGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
@@ -396,7 +413,7 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -451,6 +468,7 @@
 }
 
 .flow {
+  direction: rtl;
   margin-top: 24px;
   display: flex;
   align-items: center;
@@ -485,6 +503,8 @@
 }
 
 .projectGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -492,7 +512,7 @@
 
 .projectCard {
   min-width: 0;
-  direction: ltr;
+  direction: rtl;
   min-height: 170px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 168px;
@@ -611,12 +631,16 @@
 }
 
 .transparencyGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
 .transparencyCard {
+  direction: rtl;
+  text-align: right;
   min-width: 0;
   padding: 16px;
   border: 1px solid #d3e2f7;
@@ -668,7 +692,7 @@
 
 .transparencyFooter {
   margin-top: auto;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -692,7 +716,7 @@
 
 .cta {
   padding: 64px var(--page-pad);
-  direction: ltr;
+  direction: rtl;
   background: linear-gradient(90deg, #0049bc 0%, #003a96 100%);
   display: flex;
   align-items: center;
@@ -701,6 +725,7 @@
 }
 
 .cta h2 {
+  order: 1;
   width: min(720px, 100%);
   direction: rtl;
   margin: 0;
@@ -712,6 +737,7 @@
 }
 
 .cta .secondaryButton {
+  order: 2;
   min-height: 56px;
   padding: 16px 24px;
   font-size: 17px;
@@ -719,6 +745,8 @@
 }
 
 .footer {
+  direction: rtl;
+  text-align: right;
   min-height: 158px;
   padding: 48px var(--page-pad);
   border-top: 1px solid #e2e8f0;
@@ -746,6 +774,8 @@
 }
 
 .footerInfo {
+  direction: rtl;
+  text-align: right;
   flex: 1;
   min-width: 0;
   display: grid;
@@ -754,9 +784,11 @@
 }
 
 .footerBlock {
+  direction: rtl;
+  text-align: right;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
 }
 
@@ -778,7 +810,7 @@
 .contactDetails {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 4px;
   text-align: right;
 }
@@ -811,7 +843,7 @@
 
 @media (max-width: 1100px) {
   .hero {
-    grid-template-columns: minmax(390px, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(390px, 1fr);
   }
 
   .heroVisual {
@@ -884,6 +916,8 @@
   }
 
   .mobileMenuPanel {
+    direction: rtl;
+    text-align: right;
     position: absolute;
     left: 0;
     top: 48px;
@@ -942,11 +976,15 @@
 
   .heroCopy {
     order: 2;
+    grid-column: 1;
+    grid-row: auto;
     gap: 12px;
   }
 
   .heroVisual {
     order: 1;
+    grid-column: 1;
+    grid-row: auto;
     width: 220px;
     height: 140px;
     justify-self: end;
@@ -1062,8 +1100,8 @@
   .cta {
     padding-top: 32px;
     padding-bottom: 32px;
-    flex-direction: column-reverse;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 20px;
   }
 

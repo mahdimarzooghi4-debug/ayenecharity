@@ -6,6 +6,7 @@ import { PASSWORD_HASH_ROUNDS } from "../auth/auth.constants";
 const prisma = new PrismaClient();
 
 async function main(): Promise<void> {
+  const username = (process.env.BOOTSTRAP_ADMIN_USERNAME?.trim().toLowerCase() || "admin");
   const email = process.env.BOOTSTRAP_ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.BOOTSTRAP_ADMIN_PASSWORD;
   const fullName = process.env.BOOTSTRAP_ADMIN_NAME?.trim();
@@ -20,15 +21,18 @@ async function main(): Promise<void> {
     throw new Error("BOOTSTRAP_ADMIN_PASSWORD must contain at least 12 characters.");
   }
 
-  const existing = await prisma.adminUser.findUnique({ where: { email } });
+  const existing = await prisma.adminUser.findFirst({
+    where: { OR: [{ username }, { email }] },
+  });
   if (existing) {
-    throw new Error("An admin user with this email already exists.");
+    throw new Error("An admin user with this username or email already exists.");
   }
 
   const passwordHash = await hash(password, PASSWORD_HASH_ROUNDS);
 
   const user = await prisma.adminUser.create({
     data: {
+      username,
       email,
       passwordHash,
       fullName,
@@ -37,6 +41,7 @@ async function main(): Promise<void> {
     },
     select: {
       id: true,
+      username: true,
       email: true,
       fullName: true,
       role: true,
@@ -45,10 +50,10 @@ async function main(): Promise<void> {
 
   process.stdout.write(
     "Created bootstrap admin " +
-      user.email +
-      " (" +
+      user.username + " (" + user.email + ")" +
+      " [" +
       user.id +
-      ") with role " +
+      "] with role " +
       user.role +
       ".\n",
   );

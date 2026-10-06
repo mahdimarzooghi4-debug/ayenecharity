@@ -12,6 +12,7 @@ import { UsersService } from "./users.service";
 
 const actor: AuthenticatedAdmin = {
   id: "11111111-1111-4111-8111-111111111111",
+  username: "owner",
   email: "owner@ayene.invalid",
   fullName: "Owner",
   role: AdminRole.SUPER_ADMIN,
@@ -30,6 +31,7 @@ test("create user never returns or audits password hash", async () => {
         createdData = args.data;
         return {
           id: "22222222-2222-4222-8222-222222222222",
+          username: "new-admin",
           email: "new@ayene.invalid",
           fullName: "New Admin",
           role: AdminRole.CONTENT_MANAGER,
@@ -57,6 +59,7 @@ test("create user never returns or audits password hash", async () => {
   const service = new UsersService(prisma);
   const result = await service.create(
     {
+      username: "new-admin",
       fullName: "New Admin",
       email: "new@ayene.invalid",
       role: AdminRole.CONTENT_MANAGER,
@@ -87,6 +90,7 @@ test("disabling an admin revokes active sessions and audits status", async () =>
 
   const current = {
     id: "22222222-2222-4222-8222-222222222222",
+    username: "existing-admin",
     email: "finance@ayene.invalid",
     passwordHash: "hash",
     fullName: "Finance",
@@ -102,6 +106,7 @@ test("disabling an admin revokes active sessions and audits status", async () =>
       async update() {
         return {
           id: current.id,
+          username: current.username,
           email: current.email,
           fullName: current.fullName,
           role: current.role,
@@ -152,6 +157,7 @@ test("disabling an admin revokes active sessions and audits status", async () =>
 test("the last active super admin cannot be disabled", async () => {
   const current = {
     id: "22222222-2222-4222-8222-222222222222",
+    username: "existing-admin",
     email: "other-owner@ayene.invalid",
     passwordHash: "hash",
     fullName: "Other Owner",
@@ -191,6 +197,7 @@ test("role changes revoke active sessions", async () => {
 
   const current = {
     id: "22222222-2222-4222-8222-222222222222",
+    username: "existing-admin",
     email: "project@ayene.invalid",
     passwordHash: "hash",
     fullName: "Project",
@@ -206,6 +213,7 @@ test("role changes revoke active sessions", async () => {
       async update() {
         return {
           id: current.id,
+          username: current.username,
           email: current.email,
           fullName: current.fullName,
           role: AdminRole.CONTENT_MANAGER,

@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  icons: {
+    icon: [{ url: "/brand/logo.png", type: "image/png" }],
+    shortcut: "/brand/logo.png",
+    apple: "/brand/logo.png",
+  },
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,

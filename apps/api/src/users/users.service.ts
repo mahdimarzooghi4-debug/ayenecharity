@@ -53,6 +53,7 @@ export class UsersService {
       const user = await this.prisma.$transaction(async (tx) => {
         const created = await tx.adminUser.create({
           data: {
+            username: dto.username.trim().toLowerCase(),
             fullName: dto.fullName.trim(),
             email: dto.email.trim().toLowerCase(),
             passwordHash,
@@ -69,6 +70,7 @@ export class UsersService {
             entityType: "AdminUser",
             entityId: created.id,
             newValue: {
+              username: created.username,
               email: created.email,
               fullName: created.fullName,
               role: created.role,
@@ -84,7 +86,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      this.rethrowEmailConflict(error);
+      this.rethrowIdentityConflict(error);
       throw error;
     }
   }
@@ -124,6 +126,9 @@ export class UsersService {
         const user = await tx.adminUser.update({
           where: { id },
           data: {
+            ...(dto.username !== undefined
+              ? { username: dto.username.trim().toLowerCase() }
+              : {}),
             ...(dto.fullName !== undefined
               ? { fullName: dto.fullName.trim() }
               : {}),
@@ -154,12 +159,14 @@ export class UsersService {
             entityType: "AdminUser",
             entityId: id,
             previousValue: {
+              username: current.username,
               email: current.email,
               fullName: current.fullName,
               role: current.role,
               status: current.status,
             },
             newValue: {
+              username: user.username,
               email: user.email,
               fullName: user.fullName,
               role: user.role,
@@ -175,7 +182,7 @@ export class UsersService {
 
       return updated;
     } catch (error) {
-      this.rethrowEmailConflict(error);
+      this.rethrowIdentityConflict(error);
       throw error;
     }
   }
@@ -278,14 +285,21 @@ export class UsersService {
     }
   }
 
-  private rethrowEmailConflict(error: unknown): void {
+  private rethrowIdentityConflict(error: unknown): void {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
+      const target = Array.isArray(error.meta?.target)
+        ? error.meta?.target.map(String)
+        : [];
+      const usernameConflict = target.includes("username");
+
       throw new ConflictException({
-        code: "ADMIN_EMAIL_CONFLICT",
-        message: "Admin user email must be unique.",
+        code: usernameConflict ? "ADMIN_USERNAME_CONFLICT" : "ADMIN_EMAIL_CONFLICT",
+        message: usernameConflict
+          ? "Admin username must be unique."
+          : "Admin user email must be unique.",
       });
     }
   }
@@ -293,6 +307,7 @@ export class UsersService {
   private publicSelect() {
     return {
       id: true,
+      username: true,
       email: true,
       fullName: true,
       role: true,
@@ -305,6 +320,7 @@ export class UsersService {
 
   private toResponse(user: {
     id: string;
+    username: string;
     email: string;
     fullName: string;
     role: AdminRole;
@@ -315,6 +331,7 @@ export class UsersService {
   }) {
     return {
       id: user.id,
+      username: user.username,
       email: user.email,
       fullName: user.fullName,
       role: user.role,

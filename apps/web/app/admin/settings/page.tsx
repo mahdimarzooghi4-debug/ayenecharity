@@ -42,6 +42,7 @@ interface SettingsData {
 
 interface AdminUserItem {
   id: string;
+  username: string;
   email: string;
   fullName: string;
   role: AdminRole;
@@ -95,6 +96,8 @@ function apiMessage(
         return "لینک Placeholder یا آزمایشی قابل ذخیره نیست.";
       case "INVALID_SOCIAL_URL":
         return "لینک شبکه اجتماعی معتبر نیست.";
+      case "ADMIN_USERNAME_CONFLICT":
+        return "این نام کاربری قبلاً ثبت شده است.";
       case "ADMIN_EMAIL_CONFLICT":
         return "این ایمیل قبلاً برای کاربر دیگری ثبت شده است.";
       case "SELF_DISABLE_NOT_ALLOWED":
@@ -121,7 +124,7 @@ export default function AdminSettingsPage() {
   const [busySection, setBusySection] = useState<string | null>(null);
   const [busyUserId, setBusyUserId] = useState<string | null>(null);
   const [oneTimePassword, setOneTimePassword] = useState<{
-    email: string;
+    username: string;
     password: string;
   } | null>(null);
 
@@ -456,7 +459,7 @@ export default function AdminSettingsPage() {
           <div className={styles.initialPasswordNotice}>
             <div>
               <strong>رمز اولیه کاربر جدید</strong>
-              <span dir="ltr">{oneTimePassword.email}</span>
+              <span dir="ltr">{oneTimePassword.username}</span>
               <code dir="ltr">{oneTimePassword.password}</code>
               <small>
                 این مقدار از API برنمی‌گردد و فقط همین‌جا در حافظه مرورگر
@@ -482,6 +485,7 @@ export default function AdminSettingsPage() {
             <thead>
               <tr>
                 <th>نام</th>
+                <th>نام کاربری</th>
                 <th>ایمیل</th>
                 <th>نقش</th>
                 <th>وضعیت</th>
@@ -496,6 +500,7 @@ export default function AdminSettingsPage() {
                       {user.fullName}
                     </strong>
                   </td>
+                  <td dir="ltr">{user.username}</td>
                   <td dir="ltr">{user.email}</td>
                   <td>{roleLabels[user.role]}</td>
                   <td>
@@ -550,7 +555,7 @@ export default function AdminSettingsPage() {
 
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className={styles.emptyCell}>
+                  <td colSpan={6} className={styles.emptyCell}>
                     کاربری برای نمایش وجود ندارد.
                   </td>
                 </tr>
@@ -647,7 +652,7 @@ function AdminUserDrawer({
   value: AdminUserItem | null;
   onClose: () => void;
   onSaved: (
-    created: { email: string; password: string } | null,
+    created: { username: string; password: string } | null,
   ) => Promise<void>;
 }) {
   const [busy, setBusy] = useState(false);
@@ -659,6 +664,7 @@ function AdminUserDrawer({
     setError("");
 
     const form = new FormData(event.currentTarget);
+    const username = String(form.get("username") ?? "").trim().toLowerCase();
     const fullName = String(form.get("fullName") ?? "").trim();
     const email = String(form.get("email") ?? "")
       .trim()
@@ -675,6 +681,7 @@ function AdminUserDrawer({
         await adminApi<AdminUserItem>("/admin/users", {
           method: "POST",
           body: JSON.stringify({
+            username,
             fullName,
             email,
             role,
@@ -683,11 +690,12 @@ function AdminUserDrawer({
           }),
         });
 
-        await onSaved({ email, password: initialPassword });
+        await onSaved({ username, password: initialPassword });
         return;
       }
 
       const identityChanged =
+        username !== value.username ||
         fullName !== value.fullName ||
         email !== value.email ||
         role !== value.role;
@@ -698,6 +706,7 @@ function AdminUserDrawer({
           {
             method: "PATCH",
             body: JSON.stringify({
+              username,
               fullName,
               email,
               role,
@@ -761,6 +770,19 @@ function AdminUserDrawer({
           className={styles.settingsUserForm}
           onSubmit={submit}
         >
+          <label>
+            نام کاربری
+            <input
+              name="username"
+              defaultValue={value?.username ?? ""}
+              minLength={3}
+              maxLength={64}
+              pattern="[a-zA-Z0-9._-]+"
+              dir="ltr"
+              required
+            />
+          </label>
+
           <label>
             نام
             <input

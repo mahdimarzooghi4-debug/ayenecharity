@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { adminApi } from "../../lib/admin-api";
@@ -57,6 +58,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminShell title="داشبورد" subtitle="نمای کلی عملیات روزانه">
+      <div className={styles.dashboardPage}>
       <div className={styles.pageHeader}>
         <span className={styles.noteBadge}>داده‌های واقعی سامانه</span>
         <div>
@@ -68,15 +70,36 @@ export default function AdminDashboardPage() {
       {error ? <div className={styles.errorBox}>{error}</div> : null}
 
       <section className={styles.metricsGrid}>
-        <Metric label="درخواست‌های همکاری" value={data?.metrics.cooperationRequests} />
-        <Metric label="رسیدهای در انتظار بررسی" value={data?.metrics.pendingReceipts} accent />
-        <Metric label="مشارکت‌های ثبت‌شده" value={data?.metrics.contributions} />
-        <Metric label="طرح‌های فعال" value={data?.metrics.activeProjects} />
+        <Metric
+          label="درخواست‌های همکاری"
+          value={data?.metrics.cooperationRequests}
+          icon="/brand/metric-users-round.svg"
+        />
+        <Metric
+          label="رسیدهای در انتظار بررسی"
+          value={data?.metrics.pendingReceipts}
+          icon="/brand/metric-receipt-text.svg"
+          accent
+        />
+        <Metric
+          label="مشارکت‌های ثبت‌شده"
+          value={data?.metrics.contributions}
+          icon="/brand/admin-hand-heart.svg"
+        />
+        <Metric
+          label="طرح‌های فعال"
+          value={data?.metrics.activeProjects}
+          icon="/brand/metric-folder-check.svg"
+        />
       </section>
 
       <section className={styles.dashboardGrid}>
         <div className={styles.stack}>
-          <Panel title="رسیدهای نیازمند بررسی" subtitle="اولویت بررسی دستی">
+          <Panel
+            title="رسیدهای نیازمند بررسی"
+            subtitle="اولویت بررسی دستی"
+            badge={data ? `${faNumber.format(data.reviewQueue.length)} مورد` : "در حال دریافت"}
+          >
             <CompactList
               empty="رسیدی در انتظار بررسی نیست."
               rows={(data?.reviewQueue ?? []).map((item) => ({
@@ -88,7 +111,11 @@ export default function AdminDashboardPage() {
             />
           </Panel>
 
-          <Panel title="آخرین درخواست‌ها" subtitle="درخواست‌های همکاری">
+          <Panel
+            title="آخرین درخواست‌ها"
+            subtitle="درخواست‌های همکاری سایت"
+            badge={data ? `${faNumber.format(data.recentRequests.length)} مورد` : "در حال دریافت"}
+          >
             <CompactList
               empty="درخواستی ثبت نشده است."
               rows={(data?.recentRequests ?? []).map((item) => ({
@@ -101,7 +128,12 @@ export default function AdminDashboardPage() {
           </Panel>
         </div>
 
-        <Panel title="آخرین مشارکت‌ها" subtitle="تازه‌ترین موارد ثبت‌شده" large>
+        <Panel
+          title="آخرین مشارکت‌ها"
+          subtitle="آخرین موارد ثبت‌شده در سامانه"
+          badge={data ? `${faNumber.format(data.latestContributions.length)} مورد` : "در حال دریافت"}
+          large
+        >
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
@@ -109,8 +141,8 @@ export default function AdminDashboardPage() {
                   <th>نام</th>
                   <th>طرح</th>
                   <th>مبلغ اعلامی</th>
-                  <th>وضعیت</th>
                   <th>تاریخ</th>
+                  <th>وضعیت</th>
                 </tr>
               </thead>
               <tbody>
@@ -119,18 +151,33 @@ export default function AdminDashboardPage() {
                     <td>{item.contributorName}</td>
                     <td>{item.project.title}</td>
                     <td>{amount(item.declaredAmountRial)}</td>
-                    <td><StatusBadge status={item.status} /></td>
                     <td>{faDate.format(new Date(item.createdAt))}</td>
+                    <td><StatusBadge status={item.status} /></td>
                   </tr>
                 ))}
                 {data && data.latestContributions.length === 0 ? (
-                  <tr><td colSpan={5} className={styles.emptyCell}>هنوز مشارکتی ثبت نشده است.</td></tr>
+                  <tr>
+                    <td colSpan={5} className={styles.emptyCell}>
+                      <span className={styles.emptyTableState}>
+                        <span className={styles.emptyIcon}>
+                          <img src="/brand/wallet.svg" alt="" width={22} height={22} />
+                        </span>
+                        <strong>هنوز مشارکتی ثبت نشده است.</strong>
+                        <small>اولین مشارکت پس از ثبت در این جدول نمایش داده می‌شود.</small>
+                      </span>
+                    </td>
+                  </tr>
                 ) : null}
               </tbody>
             </table>
           </div>
+          <div className={styles.dashboardTableFooter}>
+            <Link href="/admin/contributions">مشاهده مشارکت‌ها</Link>
+            <span>داده‌های واقعی سامانه</span>
+          </div>
         </Panel>
       </section>
+      </div>
     </AdminShell>
   );
 }
@@ -138,19 +185,28 @@ export default function AdminDashboardPage() {
 function Metric({
   label,
   value,
+  icon,
   accent = false,
 }: {
   label: string;
   value: number | null | undefined;
+  icon: string;
   accent?: boolean;
 }) {
   return (
     <article className={styles.metricCard}>
       <div className={styles.metricTitle}>
-        <span className={accent ? styles.metricIconAccent : styles.metricIcon}>•</span>
         <span>{label}</span>
+        <span className={accent ? styles.metricIconAccent : styles.metricIcon}>
+          <img src={icon} alt="" width={18} height={18} />
+        </span>
       </div>
-      <strong>{value == null ? "—" : faNumber.format(value)}</strong>
+      <div className={styles.metricValue}>
+        <strong>{value == null ? "—" : faNumber.format(value)}</strong>
+        <small className={styles.metricHint}>
+          {value == null ? "در حال دریافت" : value === 0 ? "موردی ثبت نشده" : "به‌روز"}
+        </small>
+      </div>
     </article>
   );
 }
@@ -159,16 +215,19 @@ function Panel({
   title,
   subtitle,
   children,
+  badge,
   large = false,
 }: {
   title: string;
   subtitle: string;
+  badge?: string;
   children: React.ReactNode;
   large?: boolean;
 }) {
   return (
     <section className={large ? styles.panelLarge : styles.panel}>
       <div className={styles.panelHeader}>
+        {badge ? <span className={styles.panelBadge}>{badge}</span> : null}
         <div>
           <h2>{title}</h2>
           <p>{subtitle}</p>
@@ -187,7 +246,15 @@ function CompactList({
   empty: string;
 }) {
   if (rows.length === 0) {
-    return <div className={styles.emptyState}>{empty}</div>;
+    return (
+      <div className={styles.emptyState}>
+        <span className={styles.emptyIcon}>
+          <img src="/brand/clipboard.svg" alt="" width={22} height={22} />
+        </span>
+        <strong>{empty}</strong>
+        <small>با ثبت داده جدید، این بخش به‌صورت خودکار به‌روزرسانی می‌شود.</small>
+      </div>
+    );
   }
 
   return (

@@ -1,9 +1,11 @@
 .hero {
+  direction: rtl;
+  text-align: right;
   padding: 52px var(--page-pad);
   background: #f2f7ff;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -45,6 +47,8 @@
 }
 
 .content {
+  direction: rtl;
+  text-align: right;
   padding: 56px var(--page-pad) 64px;
   background: #f2f7ff;
 }
@@ -52,7 +56,7 @@
 .sectionHeader {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   margin-bottom: 24px;
 }
@@ -77,6 +81,8 @@
 }
 
 .categoryGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
@@ -84,6 +90,8 @@
 }
 
 .categoryCard {
+  direction: rtl;
+  text-align: right;
   min-width: 0;
   padding: 20px;
   border: 1px solid #e2e8f0;
@@ -92,18 +100,21 @@
   box-shadow: 0 2px 8px rgba(5, 20, 46, 0.08);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
 }
 
 .categoryHeader {
   width: 100%;
+  direction: rtl;
+  text-align: right;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .categoryBadge {
+  order: 3;
   min-height: 34px;
   padding: 8px 12px;
   border-radius: 999px;
@@ -118,6 +129,7 @@
 }
 
 .categoryHeader h2 {
+  order: 2;
   min-width: 0;
   flex: 1;
   margin: 0;
@@ -129,6 +141,7 @@
 }
 
 .categoryIcon {
+  order: 1;
   width: 40px;
   height: 40px;
   flex: 0 0 auto;
@@ -154,17 +167,21 @@
 
 .documents {
   width: 100%;
+  direction: rtl;
+  text-align: right;
   display: flex;
   flex-direction: column;
 }
 
 .documentRow {
   width: 100%;
+  direction: rtl;
+  text-align: right;
   padding: 14px 0;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
 }
 
@@ -184,9 +201,11 @@
 
 .documentMeta {
   width: 100%;
+  direction: rtl;
+  text-align: right;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 6px 10px;
   color: #475569;
   font-size: 12px;

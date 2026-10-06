@@ -10,6 +10,7 @@ import styles from "../admin.module.css";
 
 interface AdminUser {
   id: string;
+  username: string;
   email: string;
   fullName: string;
   role: "SUPER_ADMIN" | "FINANCE" | "PROJECT_MANAGER" | "CONTENT_MANAGER";
@@ -31,40 +32,47 @@ const roleLabels: Record<AdminUser["role"], string> = {
 interface NavItem {
   href: string;
   label: string;
+  icon: string;
   future?: boolean;
   roles?: readonly AdminUser["role"][];
 }
 
 const navItems: readonly NavItem[] = [
-  { href: "/admin", label: "داشبورد" },
+  { href: "/admin", label: "داشبورد", icon: "/brand/admin-layout-dashboard.svg" },
   {
     href: "/admin/projects",
     label: "طرح‌ها",
+    icon: "/brand/admin-folder-kanban.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/contributions",
     label: "مشارکت‌ها",
+    icon: "/brand/admin-hand-heart.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER"],
   },
   {
     href: "/admin/transparency",
     label: "گزارش و شفافیت",
+    icon: "/brand/admin-file-chart-column.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/requests",
     label: "درخواست‌ها",
+    icon: "/brand/admin-inbox.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/content",
     label: "محتوای سایت",
+    icon: "/brand/admin-panels-top-left.svg",
     roles: ["SUPER_ADMIN", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/settings",
     label: "تنظیمات",
+    icon: "/brand/admin-settings.svg",
     roles: ["SUPER_ADMIN"],
   },
 ];
@@ -111,13 +119,18 @@ export function AdminShell({ title, subtitle, children }: Props) {
     <div className={styles.adminApp}>
       <main className={styles.mainArea}>
         <header className={styles.topbar}>
-          <button className={styles.userButton} type="button" onClick={logout} title="خروج">
-            <span className={styles.avatar}>{user.fullName.slice(0, 1)}</span>
-            <span className={styles.userMeta}>
-              <strong>{user.fullName}</strong>
-              <small>{roleLabels[user.role]} · خروج</small>
-            </span>
-          </button>
+          <div className={styles.userArea}>
+            <div className={styles.userIdentity}>
+              <span className={styles.avatar}>{user.fullName.slice(0, 1)}</span>
+              <span className={styles.userMeta}>
+                <strong>{user.fullName}</strong>
+                <small>{roleLabels[user.role]} · @{user.username}</small>
+              </span>
+            </div>
+            <button className={styles.logoutButton} type="button" onClick={logout}>
+              خروج
+            </button>
+          </div>
           <div className={styles.topbarTitle}>
             <strong>{title}</strong>
             <small>{subtitle}</small>
@@ -128,11 +141,13 @@ export function AdminShell({ title, subtitle, children }: Props) {
 
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
+          <div className={styles.brandMark}>
+            <img src="/brand/logo.png" alt="" width={28} height={28} />
+          </div>
           <div className={styles.brandText}>
             <strong>مرکز نیکوکاری آینه</strong>
             <span>پنل مدیریت · V1</span>
           </div>
-          <div className={styles.brandMark}>آ</div>
         </div>
         <div className={styles.divider} />
         <nav className={styles.nav}>
@@ -147,8 +162,8 @@ export function AdminShell({ title, subtitle, children }: Props) {
             if (unavailable) {
               return (
                 <span className={styles.navItemDisabled} key={item.href} aria-disabled="true">
+                  <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
                   <span>{item.label}</span>
-                  <i />
                 </span>
               );
             }
@@ -159,15 +174,15 @@ export function AdminShell({ title, subtitle, children }: Props) {
                 href={item.href}
                 key={item.href}
               >
-                <span>{item.label}</span>
-                <i />
                 {active ? <b /> : null}
+                <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
+                <span>{item.label}</span>
               </Link>
             );
           })}
         </nav>
         <div className={styles.systemStatus}>
-          <span><i /> بررسی دستی پرداخت‌ها</span>
+          <span>بررسی دستی پرداخت‌ها <i /></span>
           <small>نسخه ۰.۱</small>
         </div>
       </aside>
