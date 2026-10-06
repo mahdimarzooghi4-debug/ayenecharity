@@ -1,11 +1,11 @@
-FROM node:22-alpine
+FROM node:22-bookworm
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN apk add --no-cache openssl \
-  && corepack enable \
-  && corepack prepare pnpm@10.17.1 --activate
+RUN corepack enable \
+  && corepack prepare pnpm@10.17.1 --activate \
+  && openssl version
 
 WORKDIR /app
 
