@@ -58,11 +58,11 @@ async function requestJson<T>(
   return { response, body };
 }
 
-async function login(email: string): Promise<LoginSession> {
+async function login(username: string): Promise<LoginSession> {
   const { response, body } = await requestJson("/api/admin/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   });
 
   if (response.status !== 200) {
@@ -172,6 +172,7 @@ async function seedAdmins(): Promise<void> {
   await prisma.adminUser.createMany({
     data: [
       {
+        username: "e2e-super",
         email: "e2e-super@ayene.invalid",
         passwordHash,
         fullName: "E2E Super",
@@ -179,6 +180,7 @@ async function seedAdmins(): Promise<void> {
         status: AdminUserStatus.ACTIVE,
       },
       {
+        username: "e2e-finance",
         email: "e2e-finance@ayene.invalid",
         passwordHash,
         fullName: "E2E Finance",
@@ -186,6 +188,7 @@ async function seedAdmins(): Promise<void> {
         status: AdminUserStatus.ACTIVE,
       },
       {
+        username: "e2e-project",
         email: "e2e-project@ayene.invalid",
         passwordHash,
         fullName: "E2E Project",
@@ -193,6 +196,7 @@ async function seedAdmins(): Promise<void> {
         status: AdminUserStatus.ACTIVE,
       },
       {
+        username: "e2e-content",
         email: "e2e-content@ayene.invalid",
         passwordHash,
         fullName: "E2E Content",
@@ -305,10 +309,10 @@ after(async () => {
 });
 
 test("V1 critical paths work end to end against PostgreSQL and HTTP", async () => {
-  const superAdmin = await login("e2e-super@ayene.invalid");
-  const finance = await login("e2e-finance@ayene.invalid");
-  const projectManager = await login("e2e-project@ayene.invalid");
-  const contentManager = await login("e2e-content@ayene.invalid");
+  const superAdmin = await login("e2e-super");
+  const finance = await login("e2e-finance");
+  const projectManager = await login("e2e-project");
+  const contentManager = await login("e2e-content");
 
   const projectImage = await adminUpload(
     projectManager,
