@@ -12,6 +12,7 @@
 }
 
 html {
+  scrollbar-gutter: stable;
   min-height: 100%;
   scroll-behavior: smooth;
   background: #ffffff;
