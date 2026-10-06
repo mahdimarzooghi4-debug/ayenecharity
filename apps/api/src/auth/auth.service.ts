@@ -33,11 +33,11 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginDto, context: RequestContext): Promise<LoginResult> {
-    const normalizedEmail = dto.email.trim().toLowerCase();
-    this.rateLimiter.assertAllowed(context.ipAddress, normalizedEmail);
+    const normalizedUsername = dto.username.trim().toLowerCase();
+    this.rateLimiter.assertAllowed(context.ipAddress, normalizedUsername);
 
     const user = await this.prisma.adminUser.findUnique({
-      where: { email: normalizedEmail },
+      where: { username: normalizedUsername },
     });
 
     const passwordMatches = user
@@ -45,12 +45,12 @@ export class AuthService {
       : await this.performTimingPadding(dto.password);
 
     if (!user || user.status !== AdminUserStatus.ACTIVE || !passwordMatches) {
-      this.rateLimiter.recordFailure(context.ipAddress, normalizedEmail);
-      await this.auditFailedLogin(normalizedEmail, context);
-      throw new UnauthorizedException("Invalid email or password.");
+      this.rateLimiter.recordFailure(context.ipAddress, normalizedUsername);
+      await this.auditFailedLogin(normalizedUsername, context);
+      throw new UnauthorizedException("Invalid username or password.");
     }
 
-    this.rateLimiter.clearIdentity(normalizedEmail);
+    this.rateLimiter.clearIdentity(normalizedUsername);
 
     const sessionToken = createSessionToken();
     const expiresAt = new Date(Date.now() + this.getSessionTtlMs());
@@ -169,16 +169,16 @@ export class AuthService {
   }
 
   private async auditFailedLogin(
-    normalizedEmail: string,
+    normalizedUsername: string,
     context: RequestContext,
   ): Promise<void> {
-    const emailHash = createHash("sha256").update(normalizedEmail).digest("hex");
+    const usernameHash = createHash("sha256").update(normalizedUsername).digest("hex");
 
     await this.prisma.auditLog.create({
       data: {
         action: "AUTH_LOGIN_FAILED",
         entityType: "AdminUser",
-        newValue: { emailHash },
+        newValue: { usernameHash },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
       },
@@ -187,12 +187,14 @@ export class AuthService {
 
   private toAuthenticatedAdmin(user: {
     id: string;
+    username: string;
     email: string;
     fullName: string;
     role: AuthenticatedAdmin["role"];
   }): AuthenticatedAdmin {
     return {
       id: user.id,
+      username: user.username,
       email: user.email,
       fullName: user.fullName,
       role: user.role,
