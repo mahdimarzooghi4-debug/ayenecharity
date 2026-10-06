@@ -18,7 +18,7 @@ ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_MEDIA_BASE_URL=$NEXT_PUBLIC_MEDIA_BASE_URL
 
-RUN pnpm install --no-frozen-lockfile \
+RUN pnpm install --frozen-lockfile \
   && pnpm --filter @ayene/web build \
   && chown -R node:node /app
 
