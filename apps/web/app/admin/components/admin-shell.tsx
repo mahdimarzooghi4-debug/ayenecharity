@@ -38,41 +38,41 @@ interface NavItem {
 }
 
 const navItems: readonly NavItem[] = [
-  { href: "/admin", label: "داشبورد", icon: "/brand/activity.svg" },
+  { href: "/admin", label: "داشبورد", icon: "/brand/admin-layout-dashboard.svg" },
   {
     href: "/admin/projects",
     label: "طرح‌ها",
-    icon: "/brand/workflow.svg",
+    icon: "/brand/admin-folder-kanban.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/contributions",
     label: "مشارکت‌ها",
-    icon: "/brand/wallet.svg",
+    icon: "/brand/admin-hand-heart.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER"],
   },
   {
     href: "/admin/transparency",
     label: "گزارش و شفافیت",
-    icon: "/brand/file-check.svg",
+    icon: "/brand/admin-file-chart-column.svg",
     roles: ["SUPER_ADMIN", "FINANCE", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/requests",
     label: "درخواست‌ها",
-    icon: "/brand/users.svg",
+    icon: "/brand/admin-inbox.svg",
     roles: ["SUPER_ADMIN", "PROJECT_MANAGER", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/content",
     label: "محتوای سایت",
-    icon: "/brand/file-text.svg",
+    icon: "/brand/admin-panels-top-left.svg",
     roles: ["SUPER_ADMIN", "CONTENT_MANAGER"],
   },
   {
     href: "/admin/settings",
     label: "تنظیمات",
-    icon: "/brand/shield.svg",
+    icon: "/brand/admin-settings.svg",
     roles: ["SUPER_ADMIN"],
   },
 ];
