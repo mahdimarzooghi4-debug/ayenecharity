@@ -3,7 +3,7 @@
   background: #f2f7ff;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -45,6 +45,8 @@
 }
 
 .projectsSection {
+  direction: rtl;
+  text-align: right;
   padding: 56px var(--page-pad) 64px;
   background: #ffffff;
 }
@@ -52,7 +54,7 @@
 .sectionHeader {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   margin-bottom: 24px;
 }
@@ -77,6 +79,8 @@
 }
 
 .projectsGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -90,7 +94,7 @@
   border-radius: 24px;
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(5, 20, 46, 0.08);
-  direction: ltr;
+  direction: rtl;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 190px;
   gap: 16px;
@@ -102,7 +106,7 @@
   direction: rtl;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   text-align: right;
   overflow: hidden;
@@ -218,7 +222,7 @@
 .projectsCta {
   padding: 44px var(--page-pad);
   background: #0049bc;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -226,6 +230,7 @@
 }
 
 .projectsCta h2 {
+  order: 1;
   direction: rtl;
   width: 760px;
   margin: 0;
@@ -237,6 +242,7 @@
 }
 
 .projectsCtaLink {
+  order: 2;
   min-height: 60px;
   padding: 16px 24px;
   border: 1px solid #0049bc;
@@ -258,7 +264,7 @@
   min-height: 394px;
   padding: 40px var(--page-pad);
   background: #f2f7ff;
-  direction: ltr;
+  direction: rtl;
   display: grid;
   grid-template-columns: 620px 540px;
   align-items: center;
@@ -271,7 +277,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
 }
 
@@ -347,7 +353,7 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 20px;
 }
 
@@ -372,11 +378,15 @@
 }
 
 .functionSection {
+  direction: rtl;
+  text-align: right;
   padding: 52px var(--page-pad);
   background: #f8fafc;
 }
 
 .infoGrid {
+  direction: rtl;
+  text-align: right;
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -394,7 +404,7 @@
   box-shadow: 0 2px 8px rgba(5, 20, 46, 0.08);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -441,13 +451,14 @@
 .participationCta {
   padding: 44px var(--page-pad);
   background: #0049bc;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
 .participationButton {
+  order: 2;
   min-width: 160px;
   cursor: pointer;
   min-height: 60px;
@@ -475,11 +486,12 @@
 }
 
 .participationCopy {
+  order: 1;
   direction: rtl;
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   color: #ffffff;
 }
@@ -502,11 +514,15 @@
 }
 
 .reportsSection {
+  direction: rtl;
+  text-align: right;
   padding: 52px var(--page-pad);
   background: #ffffff;
 }
 
 .reportsGrid {
+  direction: rtl;
+  text-align: right;
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -524,7 +540,7 @@
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
 }
 
@@ -657,14 +673,14 @@ a.reportCard:focus-visible {
     min-height: 188px;
     padding: 32px 20px;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: flex-start;
     gap: 0;
   }
 
   .projectsCtaLink {
     min-height: 60px;
-    align-self: flex-end;
+    align-self: flex-start;
   }
 
   .projectsCta h2 {
@@ -763,6 +779,8 @@ a.reportCard:focus-visible {
 
 /* Contribution flow — initial state follows Figma nodes 99:11923 / 99:12037 */
 .contributionDialog {
+  direction: rtl;
+  text-align: right;
   width: min(480px, calc(100vw - 40px));
   max-width: 480px;
   max-height: calc(100dvh - 48px);
@@ -786,14 +804,14 @@ a.reportCard:focus-visible {
   padding: 24px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px;
   background: #ffffff;
 }
 
 .contributionHeader {
   width: 100%;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -801,6 +819,7 @@ a.reportCard:focus-visible {
 }
 
 .contributionHeader h2 {
+  order: 1;
   direction: rtl;
   margin: 0;
   color: #0f172a;
@@ -811,6 +830,7 @@ a.reportCard:focus-visible {
 }
 
 .contributionClose {
+  order: 2;
   width: 32px;
   height: 32px;
   flex: 0 0 auto;
@@ -859,7 +879,7 @@ a.reportCard:focus-visible {
   background: #f2f7ff;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   line-height: 1.5;
 }
@@ -882,7 +902,7 @@ a.reportCard:focus-visible {
 
 .contributionActions {
   width: 100%;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: stretch;
   gap: 12px;
@@ -906,12 +926,14 @@ a.reportCard:focus-visible {
 }
 
 .contributionPrimary {
+  order: 1;
   border: 1px solid #0049bc;
   background: #0049bc;
   color: #ffffff;
 }
 
 .contributionSecondary {
+  order: 2;
   border: 1px solid #0049bc;
   background: #ffffff;
   color: #0049bc;
@@ -940,6 +962,8 @@ a.reportCard:focus-visible {
 .formField input,
 .formField textarea {
   width: 100%;
+  direction: rtl;
+  text-align: right;
   border: 1px solid #cbd5e1;
   border-radius: 14px;
   background: #ffffff;

@@ -12,6 +12,8 @@
 }
 
 html {
+  direction: rtl;
+  text-align: right;
   scrollbar-gutter: stable;
   min-height: 100%;
   scroll-behavior: smooth;
@@ -33,6 +35,18 @@ input,
 textarea,
 select {
   font: inherit;
+  direction: rtl;
+  text-align: right;
+}
+
+:where(main, section, article, aside, nav, header, footer, form, dialog) {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 a {
