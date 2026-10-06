@@ -119,13 +119,18 @@ export function AdminShell({ title, subtitle, children }: Props) {
     <div className={styles.adminApp}>
       <main className={styles.mainArea}>
         <header className={styles.topbar}>
-          <button className={styles.userButton} type="button" onClick={logout} title="خروج">
-            <span className={styles.avatar}>{user.fullName.slice(0, 1)}</span>
-            <span className={styles.userMeta}>
-              <strong>{user.fullName}</strong>
-              <small>{roleLabels[user.role]} · @{user.username} · خروج</small>
-            </span>
-          </button>
+          <div className={styles.userArea}>
+            <div className={styles.userIdentity}>
+              <span className={styles.avatar}>{user.fullName.slice(0, 1)}</span>
+              <span className={styles.userMeta}>
+                <strong>{user.fullName}</strong>
+                <small>{roleLabels[user.role]} · @{user.username}</small>
+              </span>
+            </div>
+            <button className={styles.logoutButton} type="button" onClick={logout}>
+              خروج
+            </button>
+          </div>
           <div className={styles.topbarTitle}>
             <strong>{title}</strong>
             <small>{subtitle}</small>
