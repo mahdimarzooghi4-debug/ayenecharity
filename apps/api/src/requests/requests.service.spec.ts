@@ -12,6 +12,7 @@ import { RequestsService } from "./requests.service";
 
 const contentManager: AuthenticatedAdmin = {
   id: "11111111-1111-4111-8111-111111111111",
+  username: "content-manager",
   email: "content@example.invalid",
   fullName: "Content Manager",
   role: AdminRole.CONTENT_MANAGER,
