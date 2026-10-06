@@ -4029,12 +4029,14 @@
 .dashboardPage .metricValue {
   width: 100%;
   min-height: 32px;
-  direction: ltr;
+  direction: rtl;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
   overflow: hidden;
   white-space: nowrap;
+  text-align: right;
 }
 
 .dashboardPage .metricValue strong {
