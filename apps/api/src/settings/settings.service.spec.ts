@@ -9,6 +9,7 @@ import { SettingsService } from "./settings.service";
 
 const actor: AuthenticatedAdmin = {
   id: "11111111-1111-4111-8111-111111111111",
+  username: "admin",
   email: "admin@ayene.invalid",
   fullName: "Admin",
   role: AdminRole.SUPER_ADMIN,
