@@ -2,6 +2,7 @@ import type { AdminRole } from "@prisma/client";
 
 export interface AuthenticatedAdmin {
   id: string;
+  username: string;
   email: string;
   fullName: string;
   role: AdminRole;
