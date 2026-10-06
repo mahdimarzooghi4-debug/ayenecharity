@@ -21,7 +21,7 @@ services:
 
   minio:
     # Stage only: pin immutable image digests before production promotion.
-    image: minio/minio:latest
+    image: quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
@@ -37,7 +37,7 @@ services:
       - backend
 
   minio-init:
-    image: minio/mc:latest
+    image: quay.io/minio/aistor/mc:RELEASE.2026-09-19T15-24-59Z
     restart: "no"
     depends_on:
       - minio
