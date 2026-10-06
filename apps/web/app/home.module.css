@@ -4,9 +4,12 @@
   background: #ffffff;
   color: #0f172a;
   direction: rtl;
+  text-align: right;
 }
 
 .siteHeader {
+  direction: rtl;
+  text-align: right;
   min-height: 72px;
   padding-inline: var(--page-pad);
   border-bottom: 1px solid #e2e8f0;
@@ -46,6 +49,8 @@
 
 .nav {
   order: 2;
+  direction: rtl;
+  text-align: right;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -203,7 +208,11 @@
 }
 
 .heroActions {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
@@ -338,6 +347,8 @@
 }
 
 .section {
+  direction: rtl;
+  text-align: right;
   padding: 64px var(--page-pad);
 }
 
@@ -383,6 +394,8 @@
 }
 
 .serviceGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
@@ -451,6 +464,7 @@
 }
 
 .flow {
+  direction: rtl;
   margin-top: 24px;
   display: flex;
   align-items: center;
@@ -485,6 +499,8 @@
 }
 
 .projectGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -611,12 +627,16 @@
 }
 
 .transparencyGrid {
+  direction: rtl;
+  text-align: right;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
 .transparencyCard {
+  direction: rtl;
+  text-align: right;
   min-width: 0;
   padding: 16px;
   border: 1px solid #d3e2f7;
@@ -719,6 +739,8 @@
 }
 
 .footer {
+  direction: rtl;
+  text-align: right;
   min-height: 158px;
   padding: 48px var(--page-pad);
   border-top: 1px solid #e2e8f0;
@@ -746,6 +768,8 @@
 }
 
 .footerInfo {
+  direction: rtl;
+  text-align: right;
   flex: 1;
   min-width: 0;
   display: grid;
@@ -754,6 +778,8 @@
 }
 
 .footerBlock {
+  direction: rtl;
+  text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -884,6 +910,8 @@
   }
 
   .mobileMenuPanel {
+    direction: rtl;
+    text-align: right;
     position: absolute;
     left: 0;
     top: 48px;
