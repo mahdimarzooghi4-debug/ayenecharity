@@ -141,7 +141,7 @@ export function AdminShell({ title, subtitle, children }: Props) {
           </div>
           <div className={styles.brandText}>
             <strong>مرکز نیکوکاری آینه</strong>
-            <span>پنل مدیریت</span>
+            <span>پنل مدیریت · V1</span>
           </div>
         </div>
         <div className={styles.divider} />
@@ -169,16 +169,16 @@ export function AdminShell({ title, subtitle, children }: Props) {
                 href={item.href}
                 key={item.href}
               >
+                {active ? <b /> : null}
                 <img className={styles.navIcon} src={item.icon} alt="" width={18} height={18} />
                 <span>{item.label}</span>
-                {active ? <b /> : null}
               </Link>
             );
           })}
         </nav>
         <div className={styles.systemStatus}>
-          <span><i /> سامانه عملیاتی است</span>
-          <small>پرداخت‌ها با بررسی انسانی تأیید می‌شوند</small>
+          <span>بررسی دستی پرداخت‌ها <i /></span>
+          <small>نسخه ۰.۱</small>
         </div>
       </aside>
     </div>
